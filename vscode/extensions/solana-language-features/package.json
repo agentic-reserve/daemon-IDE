@@ -1,0 +1,24 @@
+{
+	"name": "solana-language-features",
+	"displayName": "Solana Language Features",
+	"description": "Lightweight Solana language features for Rust and TypeScript.",
+	"version": "0.0.1",
+	"publisher": "solana-ide",
+	"engines": {
+		"vscode": "^1.95.0"
+	},
+	"main": "./extension.js",
+	"activationEvents": [
+		"onLanguage:rust",
+		"onLanguage:typescript",
+		"onCommand:solana.explainError"
+	],
+	"contributes": {
+		"commands": [
+			{
+				"command": "solana.explainError",
+				"title": "Solana: Explain Program Error"
+			}
+		]
+	}
+}

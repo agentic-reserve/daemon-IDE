@@ -1,0 +1,40 @@
+{
+	"name": "Anchor TOML",
+	"scopeName": "source.anchor.toml",
+	"patterns": [
+		{ "include": "#comments" },
+		{ "include": "#section" },
+		{ "include": "#keyvalue" }
+	],
+	"repository": {
+		"comments": {
+			"patterns": [
+				{
+					"name": "comment.line.number-sign.anchor-toml",
+					"begin": "#",
+					"end": "$"
+				}
+			]
+		},
+		"section": {
+			"patterns": [
+				{
+					"name": "entity.name.section.anchor-toml",
+					"match": "^\\s*\\[[^\\]]+\\]\\s*$"
+				}
+			]
+		},
+		"keyvalue": {
+			"patterns": [
+				{
+					"name": "meta.key-value.anchor-toml",
+					"match": "^\\s*([A-Za-z0-9_.-]+)\\s*=\\s*(.+)$",
+					"captures": {
+						"1": { "name": "variable.other.key.anchor-toml" },
+						"2": { "name": "string.unquoted.value.anchor-toml" }
+					}
+				}
+			]
+		}
+	}
+}

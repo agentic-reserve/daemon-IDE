@@ -1,0 +1,41 @@
+{
+	"name": "solana-basics",
+	"displayName": "Solana Basics",
+	"description": "Core language basics, snippets, and grammar for Solana workflows.",
+	"version": "0.0.1",
+	"publisher": "solana-ide",
+	"engines": {
+		"vscode": "^1.95.0"
+	},
+	"categories": [
+		"Programming Languages",
+		"Snippets"
+	],
+	"contributes": {
+		"languages": [
+			{
+				"id": "anchor-toml",
+				"aliases": ["Anchor TOML", "anchor-toml"],
+				"extensions": [".anchor.toml"],
+				"configuration": "./language-configuration.json"
+			}
+		],
+		"grammars": [
+			{
+				"language": "anchor-toml",
+				"scopeName": "source.anchor.toml",
+				"path": "./syntaxes/anchor-toml.tmLanguage.json"
+			}
+		],
+		"snippets": [
+			{
+				"language": "rust",
+				"path": "./snippets/anchor.code-snippets"
+			},
+			{
+				"language": "typescript",
+				"path": "./snippets/anchor.code-snippets"
+			}
+		]
+	}
+}

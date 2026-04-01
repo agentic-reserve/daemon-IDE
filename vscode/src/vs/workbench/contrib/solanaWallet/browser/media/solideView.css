@@ -1,0 +1,60 @@
+.solide-view {
+	padding: 10px 12px 12px 12px;
+}
+
+.solide-view__intro {
+	margin: 0 0 12px 0;
+	opacity: 0.88;
+	line-height: 1.45;
+}
+
+.solide-view__section {
+	margin-top: 12px;
+	padding: 10px;
+	border: 1px solid var(--vscode-panel-border);
+	border-radius: 10px;
+	background: color-mix(in srgb, var(--vscode-sideBar-background) 78%, var(--vscode-editorWidget-background));
+	box-shadow: 0 1px 0 color-mix(in srgb, var(--vscode-widget-shadow) 22%, transparent);
+}
+
+.solide-view__section:first-child {
+	margin-top: 0;
+}
+
+.solide-view__title {
+	margin: 0 0 10px 0;
+	font-size: 11px;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	opacity: 0.92;
+}
+
+.solide-view__button {
+	box-sizing: border-box;
+	display: block;
+	width: 100%;
+	text-align: left;
+	margin: 8px 0 0 0;
+	padding: 8px 10px;
+	border-radius: 8px;
+	border: 1px solid color-mix(in srgb, var(--vscode-button-background) 30%, var(--vscode-panel-border));
+	background: color-mix(in srgb, var(--vscode-button-background) 22%, transparent);
+	color: var(--vscode-foreground);
+	transition: background-color 80ms linear, border-color 80ms linear;
+}
+
+.solide-view__button:first-of-type {
+	margin-top: 0;
+}
+
+.solide-view__button:hover {
+	background: color-mix(in srgb, var(--vscode-button-hoverBackground) 28%, transparent);
+	border-color: color-mix(in srgb, var(--vscode-button-hoverBackground) 40%, var(--vscode-panel-border));
+}
+
+.solide-view__button:focus-visible {
+	outline: 1px solid var(--vscode-focusBorder);
+	outline-offset: 1px;
+}
+

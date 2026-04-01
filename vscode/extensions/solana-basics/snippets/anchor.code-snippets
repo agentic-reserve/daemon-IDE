@@ -1,0 +1,41 @@
+{
+	"Anchor Program Module": {
+		"prefix": "anchor-program",
+		"body": [
+			"use anchor_lang::prelude::*;",
+			"",
+			"declare_id!(\"${1:ProgramId11111111111111111111111111111111111}\");",
+			"",
+			"#[program]",
+			"pub mod ${2:my_program} {",
+			"\tuse super::*;",
+			"",
+			"\tpub fn ${3:initialize}(ctx: Context<${4:Initialize}>) -> Result<()> {",
+			"\t\tOk(())",
+			"\t}",
+			"}",
+			"",
+			"#[derive(Accounts)]",
+			"pub struct ${4:Initialize}<'info> {",
+			"\t#[account(mut)]",
+			"\tpub signer: Signer<'info>,",
+			"\tpub system_program: Program<'info, System>,",
+			"}"
+		],
+		"description": "Create a starter Anchor program module."
+	},
+	"Anchor Client Call": {
+		"prefix": "anchor-client-call",
+		"body": [
+			"const tx = await program.methods",
+			"\t.${1:initialize}()",
+			"\t.accounts({",
+			"\t\t${2:signer}: wallet.publicKey,",
+			"\t})",
+			"\t.rpc();",
+			"",
+			"console.log('signature', tx);"
+		],
+		"description": "Create a starter Anchor TypeScript client call."
+	}
+}
