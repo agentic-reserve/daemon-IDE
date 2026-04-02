@@ -16,6 +16,8 @@ pub mod singleton_server;
 mod challenge;
 mod control_server;
 mod nosleep;
+#[cfg(feature = "pq-kem")]
+mod pq_session;
 #[cfg(target_os = "linux")]
 mod nosleep_linux;
 #[cfg(target_os = "macos")]
@@ -37,6 +39,8 @@ mod wsl_detect;
 
 pub use control_server::{serve, serve_stream, AuthRequired, Next, ServeStreamParams};
 pub use nosleep::SleepInhibitor;
+#[cfg(feature = "pq-kem")]
+pub use pq_session::pq_session::PqSessionKeys;
 pub use service::{
 	create_service_manager, ServiceContainer, ServiceManager, SERVICE_LOG_FILE_NAME,
 };

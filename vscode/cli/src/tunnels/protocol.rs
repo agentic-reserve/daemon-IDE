@@ -276,6 +276,8 @@ pub struct SpawnResult {
 
 pub const METHOD_CHALLENGE_ISSUE: &str = "challenge_issue";
 pub const METHOD_CHALLENGE_VERIFY: &str = "challenge_verify";
+pub const METHOD_PQ_KEM_OFFER: &str = "pq_kem_offer";
+pub const METHOD_PQ_KEM_ACCEPT: &str = "pq_kem_accept";
 
 #[derive(Serialize, Deserialize)]
 pub struct ChallengeIssueParams {
@@ -290,6 +292,26 @@ pub struct ChallengeIssueResponse {
 #[derive(Deserialize, Serialize)]
 pub struct ChallengeVerifyParams {
 	pub response: String,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct PqKemOffer {
+	/// ML-KEM-768 serialized public key, base64url-no-pad.
+	pub ek: String,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct PqKemAccept {
+	/// ML-KEM-768 serialized ciphertext, base64url-no-pad.
+	pub ct: String,
+	/// Optional session nonce for future key-binding.
+	pub nonce: Option<String>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct PqKemResult {
+	/// Acknowledge completion.
+	pub ok: bool,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Eq, Copy, Clone, Debug)]

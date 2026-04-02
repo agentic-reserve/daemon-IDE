@@ -61,6 +61,10 @@ use super::protocol::{
 	SysKillRequest, SysKillResponse, ToClientRequest, UnforwardParams, UpdateParams, UpdateResult,
 	VersionResponse, METHOD_CHALLENGE_VERIFY,
 };
+#[cfg(feature = "pq-kem")]
+use super::protocol::{
+	METHOD_PQ_KEM_ACCEPT, METHOD_PQ_KEM_OFFER, PqKemAccept, PqKemOffer, PqKemResult,
+};
 use super::server_bridge::ServerBridge;
 use super::server_multiplexer::ServerMultiplexer;
 use super::shutdown_signal::ShutdownSignal;
@@ -104,6 +108,9 @@ enum AuthState {
 	WaitingForChallenge(Option<String>),
 	/// A challenge has been issued. Waiting for a verification.
 	ChallengeIssued(String),
+	/// ML-KEM offer was sent and waiting for a ciphertext.
+	#[cfg(feature = "pq-kem")]
+	PqKemOffered(libcrux_ml_kem::mlkem768::MlKem768PrivateKey),
 	/// Auth is no longer required.
 	Authenticated,
 }
@@ -421,6 +428,14 @@ fn make_socket_rpc(
 	});
 	rpc.register_sync(METHOD_CHALLENGE_VERIFY, |p: ChallengeVerifyParams, c| {
 		handle_challenge_verify(p.response, &c.auth_state)
+	});
+	#[cfg(feature = "pq-kem")]
+	rpc.register_sync(METHOD_PQ_KEM_OFFER, |_: EmptyObject, c| {
+		handle_pq_kem_offer(&c.auth_state)
+	});
+	#[cfg(feature = "pq-kem")]
+	rpc.register_sync(METHOD_PQ_KEM_ACCEPT, |p: PqKemAccept, c| {
+		handle_pq_kem_accept(p, &c.auth_state)
 	});
 	rpc.register_async("serve", move |params: ServeParams, c| async move {
 		ensure_auth(&c.auth_state)?;
@@ -1089,6 +1104,39 @@ fn handle_challenge_verify(
 				Ok(EmptyObject {})
 			}
 		},
+		#[cfg(feature = "pq-kem")]
+		AuthState::PqKemOffered(_) => Err(CodeError::AuthChallengeNotIssued.into()),
+	}
+}
+
+#[cfg(feature = "pq-kem")]
+fn handle_pq_kem_offer(
+	auth_state: &Arc<std::sync::Mutex<AuthState>>,
+) -> Result<PqKemOffer, AnyError> {
+	use super::pq_session::pq_session;
+
+	let mut state = auth_state.lock().unwrap();
+	let (ek_b64, private_key) = pq_session::server_generate_keypair(&mut rand::thread_rng());
+	*state = AuthState::PqKemOffered(private_key);
+
+	Ok(PqKemOffer { ek: ek_b64 })
+}
+
+#[cfg(feature = "pq-kem")]
+fn handle_pq_kem_accept(
+	params: PqKemAccept,
+	auth_state: &Arc<std::sync::Mutex<AuthState>>,
+) -> Result<PqKemResult, AnyError> {
+	use super::pq_session::pq_session;
+
+	let mut state = auth_state.lock().unwrap();
+	if let AuthState::PqKemOffered(private_key) = &*state {
+		let _session_keys = pq_session::server_decapsulate(private_key, &params.ct)
+			.map_err(|e| wrap(e, "pq-kem decapsulation failed"))?;
+		*state = AuthState::Authenticated;
+		Ok(PqKemResult { ok: true })
+	} else {
+		Err(CodeError::AuthChallengeNotIssued.into())
 	}
 }
 
@@ -1408,6 +1456,14 @@ async fn do_challenge_response_flow(
 	caller: RpcCaller<MsgPackSerializer>,
 	shutdown: BarrierOpener<()>,
 ) -> Result<(), CodeError> {
+	#[cfg(feature = "pq-kem")]
+	{
+		if try_pq_kem_flow(&caller).await? {
+			shutdown.open(());
+			return Ok(());
+		}
+	}
+
 	let challenge: ChallengeIssueResponse = caller
 		.call(METHOD_CHALLENGE_ISSUE, EmptyObject {})
 		.await
@@ -1428,4 +1484,38 @@ async fn do_challenge_response_flow(
 	shutdown.open(());
 
 	Ok(())
+}
+
+#[cfg(feature = "pq-kem")]
+async fn try_pq_kem_flow(caller: &RpcCaller<MsgPackSerializer>) -> Result<bool, CodeError> {
+	let offer: PqKemOffer = match caller.call(METHOD_PQ_KEM_OFFER, EmptyObject {}).await {
+		Ok(Ok(v)) => v,
+		// Server may not support pq-kem yet; fall back to classical flow.
+		_ => return Ok(false),
+	};
+
+	let (ct, _keys) = match super::pq_session::pq_session::client_encapsulate(
+		&offer.ek,
+		&mut rand::thread_rng(),
+	) {
+		Ok(v) => v,
+		// Invalid payload means we cannot complete pq-kem safely; fall back.
+		Err(_) => return Ok(false),
+	};
+
+	let result: PqKemResult = match caller
+		.call(
+			METHOD_PQ_KEM_ACCEPT,
+			PqKemAccept {
+				ct,
+				nonce: None,
+			},
+		)
+		.await
+	{
+		Ok(Ok(v)) => v,
+		_ => return Ok(false),
+	};
+
+	Ok(result.ok)
 }
