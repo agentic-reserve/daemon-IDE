@@ -7,7 +7,7 @@ use crate::constants::{CONTROL_PORT, PRODUCT_NAME_LONG};
 use crate::log;
 use crate::msgpack_rpc::{new_msgpack_rpc, start_msgpack_rpc, MsgPackCodec, MsgPackSerializer};
 use crate::options::Quality;
-use crate::rpc::{MaybeSync, RpcBuilder, RpcCaller, RpcDispatcher};
+use crate::rpc::{MaybeSync, ResponseError, RpcBuilder, RpcCaller, RpcDispatcher};
 use crate::self_update::SelfUpdate;
 use crate::state::LauncherPaths;
 use crate::tunnels::protocol::{HttpRequestParams, PortPrivacy, METHOD_CHALLENGE_ISSUE};
@@ -63,7 +63,8 @@ use super::protocol::{
 };
 #[cfg(feature = "pq-kem")]
 use super::protocol::{
-	METHOD_PQ_KEM_ACCEPT, METHOD_PQ_KEM_OFFER, PqKemAccept, PqKemOffer, PqKemResult,
+	METHOD_PQ_KEM_ACCEPT, METHOD_PQ_KEM_OFFER, PqKemAccept, PqKemOffer, PqKemOfferParams,
+	PqKemResult,
 };
 use super::server_bridge::ServerBridge;
 use super::server_multiplexer::ServerMultiplexer;
@@ -430,8 +431,8 @@ fn make_socket_rpc(
 		handle_challenge_verify(p.response, &c.auth_state)
 	});
 	#[cfg(feature = "pq-kem")]
-	rpc.register_sync(METHOD_PQ_KEM_OFFER, |_: EmptyObject, c| {
-		handle_pq_kem_offer(&c.auth_state)
+	rpc.register_sync(METHOD_PQ_KEM_OFFER, |p: PqKemOfferParams, c| {
+		handle_pq_kem_offer(p, &c.auth_state)
 	});
 	#[cfg(feature = "pq-kem")]
 	rpc.register_sync(METHOD_PQ_KEM_ACCEPT, |p: PqKemAccept, c| {
@@ -1111,11 +1112,21 @@ fn handle_challenge_verify(
 
 #[cfg(feature = "pq-kem")]
 fn handle_pq_kem_offer(
+	params: PqKemOfferParams,
 	auth_state: &Arc<std::sync::Mutex<AuthState>>,
 ) -> Result<PqKemOffer, AnyError> {
 	use super::pq_session::pq_session;
 
 	let mut state = auth_state.lock().unwrap();
+	match &*state {
+		AuthState::WaitingForChallenge(Some(expected_token)) => match &params.token {
+			Some(token) if token == expected_token => {}
+			_ => return Err(CodeError::AuthChallengeBadToken.into()),
+		},
+		AuthState::WaitingForChallenge(None) => {}
+		_ => return Err(CodeError::AuthChallengeNotIssued.into()),
+	}
+
 	let (ek_b64, private_key) = pq_session::server_generate_keypair(&mut rand::thread_rng());
 	*state = AuthState::PqKemOffered(private_key);
 
@@ -1488,10 +1499,14 @@ async fn do_challenge_response_flow(
 
 #[cfg(feature = "pq-kem")]
 async fn try_pq_kem_flow(caller: &RpcCaller<MsgPackSerializer>) -> Result<bool, CodeError> {
-	let offer: PqKemOffer = match caller.call(METHOD_PQ_KEM_OFFER, EmptyObject {}).await {
-		Ok(Ok(v)) => v,
-		// Server may not support pq-kem yet; fall back to classical flow.
-		_ => return Ok(false),
+	let offer: PqKemOffer = match caller
+		.call(METHOD_PQ_KEM_OFFER, PqKemOfferParams { token: None })
+		.await
+		.unwrap()
+	{
+		Ok(v) => v,
+		Err(e) if is_method_not_found_response(&e) => return Ok(false),
+		Err(e) => return Err(CodeError::TunnelRpcCallFailed(e)),
 	};
 
 	let (ct, _keys) = match super::pq_session::pq_session::client_encapsulate(
@@ -1499,8 +1514,8 @@ async fn try_pq_kem_flow(caller: &RpcCaller<MsgPackSerializer>) -> Result<bool, 
 		&mut rand::thread_rng(),
 	) {
 		Ok(v) => v,
-		// Invalid payload means we cannot complete pq-kem safely; fall back.
-		Err(_) => return Ok(false),
+		// If pq-kem was offered, malformed key material must fail auth.
+		Err(_) => return Err(CodeError::AuthMismatch),
 	};
 
 	let result: PqKemResult = match caller
@@ -1514,8 +1529,19 @@ async fn try_pq_kem_flow(caller: &RpcCaller<MsgPackSerializer>) -> Result<bool, 
 		.await
 	{
 		Ok(Ok(v)) => v,
-		_ => return Ok(false),
+		Ok(Err(e)) if is_method_not_found_response(&e) => return Ok(false),
+		Ok(Err(e)) => return Err(CodeError::TunnelRpcCallFailed(e)),
+		Err(_) => return Err(CodeError::AuthMismatch),
 	};
 
-	Ok(result.ok)
+	if !result.ok {
+		return Err(CodeError::AuthMismatch);
+	}
+
+	Ok(true)
+}
+
+#[cfg(feature = "pq-kem")]
+fn is_method_not_found_response(error: &ResponseError) -> bool {
+	error.message.starts_with("Method not found:")
 }

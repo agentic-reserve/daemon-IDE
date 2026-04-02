@@ -301,6 +301,12 @@ pub struct PqKemOffer {
 }
 
 #[derive(Serialize, Deserialize)]
+pub struct PqKemOfferParams {
+	/// Optional token required in VSDAWithToken mode.
+	pub token: Option<String>,
+}
+
+#[derive(Serialize, Deserialize)]
 pub struct PqKemAccept {
 	/// ML-KEM-768 serialized ciphertext, base64url-no-pad.
 	pub ct: String,
