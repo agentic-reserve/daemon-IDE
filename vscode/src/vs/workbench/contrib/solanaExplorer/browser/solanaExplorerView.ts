@@ -28,6 +28,7 @@ export const enum SolanaExplorerCommandId {
 	LookupTransaction = 'solana.explorer.lookupTransaction',
 	LookupProgram = 'solana.explorer.lookupProgram',
 	LookupToken = 'solana.explorer.lookupToken',
+	VerifyDomainAssociation = 'solana.explorer.verifyDomainAssociation',
 }
 
 export class SolanaExplorerView extends ViewPane {
@@ -68,6 +69,9 @@ export class SolanaExplorerView extends ViewPane {
 		]);
 		this._renderSection(root, localize('solana.explorer.tokens', "Tokens"), [
 			{ label: localize('solana.explorer.lookupToken', "Inspect token mint"), command: SolanaExplorerCommandId.LookupToken },
+		]);
+		this._renderSection(root, localize('solana.explorer.domainVerification', "Domain Verification"), [
+			{ label: localize('solana.explorer.verifyDomainAssociation', "Verify domain association"), command: SolanaExplorerCommandId.VerifyDomainAssociation },
 		]);
 	}
 

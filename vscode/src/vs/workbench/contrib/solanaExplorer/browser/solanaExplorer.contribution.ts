@@ -15,6 +15,7 @@ import { IQuickInputService } from '../../../../platform/quickinput/common/quick
 import { INotificationService, Severity } from '../../../../platform/notification/common/notification.js';
 import { IConfigurationService } from '../../../../platform/configuration/common/configuration.js';
 import { SolanaSettingId } from '../../solana/common/solanaConfiguration.js';
+import { DomainAssociationMode, DomainAssociationRecordType, verifyDomainAssociation } from '../../solana/common/domainAssociation.js';
 import { VIEW_CONTAINER } from '../../files/browser/explorerViewlet.js';
 import { SolanaExplorerCommandId, SolanaExplorerView, SOLANA_EXPLORER_VIEW_ID } from './solanaExplorerView.js';
 
@@ -63,6 +64,75 @@ registerAction2(class extends Action2 {
 			console.debug('[SolanaExplorer] getAccountInfo', result);
 		} catch (error) {
 			notificationService.error(localize('solana.explorer.account.error', "Failed to lookup account: {0}", error instanceof Error ? error.message : String(error)));
+		}
+	}
+});
+
+registerAction2(class extends Action2 {
+	constructor() {
+		super({ id: SolanaExplorerCommandId.VerifyDomainAssociation, title: localize2('solana.explorer.verifyDomainAssociation.command', "Solana: Verify Domain Association") });
+	}
+	override async run(accessor: import('../../../../platform/instantiation/common/instantiation.js').ServicesAccessor): Promise<void> {
+		const quickInput = accessor.get(IQuickInputService);
+		const notificationService = accessor.get(INotificationService);
+		const configurationService = accessor.get(IConfigurationService);
+
+		const domain = await quickInput.input({ prompt: localize('solana.explorer.verify.domain.prompt', "Enter domain (for example, example.com)") });
+		if (!domain) {
+			return;
+		}
+
+		const address = await quickInput.input({ prompt: localize('solana.explorer.verify.address.prompt', "Enter Solana address") });
+		if (!address) {
+			return;
+		}
+
+		const selectedType = await quickInput.pick([
+			{ id: 'any', label: localize('solana.explorer.verify.type.any', "Any type") },
+			{ id: DomainAssociationRecordType.Address, label: localize('solana.explorer.verify.type.address', "Wallet address") },
+			{ id: DomainAssociationRecordType.Program, label: localize('solana.explorer.verify.type.program', "Program address") },
+			{ id: DomainAssociationRecordType.Mint, label: localize('solana.explorer.verify.type.mint', "Mint address") },
+		], { placeHolder: localize('solana.explorer.verify.type.placeholder', "Select expected association type") });
+		if (!selectedType) {
+			return;
+		}
+
+		const mode = configurationService.getValue<DomainAssociationMode>(SolanaSettingId.DomainVerificationMode) ?? DomainAssociationMode.Compat;
+		const network = configurationService.getValue<string>(SolanaSettingId.DomainVerificationNetwork) ?? 'mainnet';
+
+		try {
+			const result = await verifyDomainAssociation(domain.trim(), address.trim(), {
+				mode,
+				network,
+				recordType: selectedType.id === 'any' ? undefined : selectedType.id as DomainAssociationRecordType,
+			});
+
+			const reason = `${result.reason} (mode=${result.mode}, network=${result.network}, records=${result.recordsConsidered})`;
+			if (result.matched && !result.denied) {
+				notificationService.notify({
+					severity: Severity.Info,
+					message: localize('solana.explorer.verify.success', "Domain association matched for {0}: {1}", result.domain, reason),
+					source: 'Solana Explorer',
+				});
+			} else {
+				notificationService.notify({
+					severity: Severity.Warning,
+					message: localize('solana.explorer.verify.noMatch', "Domain association did not match for {0}: {1}", result.domain, reason),
+					source: 'Solana Explorer',
+				});
+			}
+
+			if (result.warnings.length) {
+				notificationService.notify({
+					severity: Severity.Warning,
+					message: localize('solana.explorer.verify.warnings', "Domain verification warnings: {0}", result.warnings.join(' | ')),
+					source: 'Solana Explorer',
+				});
+			}
+
+			console.debug('[SolanaExplorer] verifyDomainAssociation', result);
+		} catch (error) {
+			notificationService.error(localize('solana.explorer.verify.error', "Failed to verify domain association: {0}", error instanceof Error ? error.message : String(error)));
 		}
 	}
 });

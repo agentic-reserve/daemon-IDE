@@ -11,6 +11,7 @@ pub mod constants;
 pub mod log;
 pub mod commands;
 pub mod desktop;
+pub mod domain_association;
 pub mod options;
 pub mod self_update;
 pub mod state;

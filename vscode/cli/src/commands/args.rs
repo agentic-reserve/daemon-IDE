@@ -189,6 +189,50 @@ pub enum Commands {
 	/// Runs a local agent host server.
 	#[clap(name = "agent-host")]
 	AgentHost(AgentHostArgs),
+
+	/// Verify domain ↔ Solana address association (sRFC-35).
+	#[clap(name = "verify-domain")]
+	VerifyDomain(VerifyDomainArgs),
+}
+
+#[derive(clap::ValueEnum, Copy, Clone, Debug, Eq, PartialEq)]
+pub enum VerifyDomainMode {
+	Strict,
+	Compat,
+	Minimal,
+}
+
+#[derive(clap::ValueEnum, Copy, Clone, Debug, Eq, PartialEq)]
+pub enum VerifyDomainAddressType {
+	Program,
+	Mint,
+	Address,
+}
+
+#[derive(Args, Debug, Clone)]
+pub struct VerifyDomainArgs {
+	/// Domain to verify (e.g. example.com).
+	#[clap(long)]
+	pub domain: String,
+
+	/// Solana address (base58) to check against domain records.
+	#[clap(long)]
+	pub address: String,
+
+	/// Optional record type filter.
+	#[clap(long = "type", value_enum)]
+	pub address_type: Option<VerifyDomainAddressType>,
+
+	/// Network moniker to validate (`mainnet`, `devnet`, `testnet`).
+	#[clap(long, default_value = "mainnet")]
+	pub network: String,
+
+	/// Verification mode.
+	#[clap(long, value_enum, default_value_t = VerifyDomainMode::Compat)]
+	pub mode: VerifyDomainMode,
+
+	#[clap(flatten)]
+	pub output_format: OutputFormatOptions,
 }
 
 #[derive(Args, Debug, Clone)]

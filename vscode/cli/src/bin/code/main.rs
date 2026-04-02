@@ -8,7 +8,7 @@ use std::process::Command;
 
 use clap::Parser;
 use cli::{
-	commands::{agent_host, args, serve_web, tunnels, update, version, CommandContext},
+	commands::{agent_host, args, domain_verify, serve_web, tunnels, update, version, CommandContext},
 	constants::get_default_user_agent,
 	desktop, log,
 	state::LauncherPaths,
@@ -105,6 +105,10 @@ async fn main() -> Result<(), std::convert::Infallible> {
 
 			Some(args::Commands::AgentHost(ah_args)) => {
 				agent_host::agent_host(context!(), ah_args).await
+			}
+
+			Some(args::Commands::VerifyDomain(verify_args)) => {
+				domain_verify::verify_domain(context!(), verify_args).await
 			}
 
 			Some(args::Commands::Tunnel(mut tunnel_args)) => match tunnel_args.subcommand.take() {

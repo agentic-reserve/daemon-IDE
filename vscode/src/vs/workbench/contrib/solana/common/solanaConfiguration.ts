@@ -9,6 +9,8 @@ import { Registry } from '../../../../platform/registry/common/platform.js';
 
 export const enum SolanaSettingId {
 	RpcUrl = 'solide.solana.rpcUrl',
+	DomainVerificationMode = 'solide.solana.domainVerification.mode',
+	DomainVerificationNetwork = 'solide.solana.domainVerification.network',
 	WalletActiveKeypair = 'solide.wallet.activeKeypair',
 	WalletAutoAirdrop = 'solide.wallet.autoAirdrop',
 }
@@ -23,6 +25,17 @@ Registry.as<IConfigurationRegistry>(ConfigurationExtensions.Configuration).regis
 			type: 'string',
 			default: 'https://api.devnet.solana.com',
 			markdownDescription: localize('solide.solana.rpcUrl', "RPC URL used by Solana explorer and wallet features."),
+		},
+		[SolanaSettingId.DomainVerificationMode]: {
+			type: 'string',
+			enum: ['strict', 'compat', 'minimal'],
+			default: 'compat',
+			markdownDescription: localize('solide.solana.domainVerification.mode', "Verification mode for domain-to-address association checks."),
+		},
+		[SolanaSettingId.DomainVerificationNetwork]: {
+			type: 'string',
+			default: 'mainnet',
+			markdownDescription: localize('solide.solana.domainVerification.network', "Default network qualifier used by domain verification checks."),
 		},
 		[SolanaSettingId.WalletActiveKeypair]: {
 			type: 'string',
