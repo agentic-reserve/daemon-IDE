@@ -60,6 +60,15 @@ async function fileExists(fileService: IFileService, path: string): Promise<bool
 	}
 }
 
+function ghidraAnalyzeHeadlessPath(ghidraInstallDir: string): string {
+	return URI.joinPath(URI.file(ghidraInstallDir), 'support', 'analyzeHeadless').fsPath;
+}
+
+async function validateGhidraInstallDir(fileService: IFileService, ghidraInstallDir: string): Promise<boolean> {
+	const analyzeHeadless = ghidraAnalyzeHeadlessPath(ghidraInstallDir);
+	return fileExists(fileService, analyzeHeadless);
+}
+
 registerAction2(class extends Action2 {
 	constructor() {
 		super({ id: SolanaEbpfCommandId.ConfigureGhidra, title: localize2('solana.ebpf.configureGhidra', "Solana: Configure Ghidra") });
@@ -105,12 +114,24 @@ registerAction2(class extends Action2 {
 			ghidraInstallDir = normalizePathInput(typed);
 			await configurationService.updateValue(SolanaEbpfSettingId.GhidraInstallDir, ghidraInstallDir, ConfigurationTarget.USER);
 		}
+		if (!(await validateGhidraInstallDir(fileService, ghidraInstallDir))) {
+			notificationService.error(localize(
+				'solana.ebpf.ghidra.invalid.install',
+				"Invalid Ghidra install dir: expected `{0}`. Run “Solana: Configure Ghidra” and select your Ghidra root folder.",
+				ghidraAnalyzeHeadlessPath(ghidraInstallDir)
+			));
+			return;
+		}
 
 		// Derive repo root from the app root, then locate the module folder next to `vscode/`.
 		const appRoot = URI.file(environmentService.appRoot);
 		const moduleFolder = URI.joinPath(appRoot, '..', '..', 'Solana-eBPF-for-Ghidra');
 		if (!(await fileService.exists(moduleFolder))) {
-			notificationService.error(localize('solana.ebpf.module.missing', "Missing `Solana-eBPF-for-Ghidra/` folder in this workspace."));
+			notificationService.error(localize(
+				'solana.ebpf.module.missing',
+				"Missing `Solana-eBPF-for-Ghidra/` folder at `{0}`. Ensure ARGUS IDE is launched from this repository root.",
+				moduleFolder.fsPath
+			));
 			return;
 		}
 
@@ -150,6 +171,14 @@ registerAction2(class extends Action2 {
 			notificationService.error(localize('solana.ebpf.ghidra.notSet', "Ghidra install dir is not configured. Run “Solana: Configure Ghidra” first."));
 			return;
 		}
+		if (!(await validateGhidraInstallDir(fileService, ghidraInstallDir))) {
+			notificationService.error(localize(
+				'solana.ebpf.ghidra.invalid.decompile',
+				"Invalid Ghidra install dir: expected `{0}`. Run “Solana: Configure Ghidra” and select your Ghidra root folder.",
+				ghidraAnalyzeHeadlessPath(ghidraInstallDir)
+			));
+			return;
+		}
 
 		const binaryPathInput = await quickInput.input({
 			prompt: localize('solana.ebpf.binary.prompt', "Path to Solana program binary (.so)"),
@@ -171,7 +200,7 @@ registerAction2(class extends Action2 {
 		const exportRoot = URI.joinPath(projectRoot, `${projectName}-export`);
 		const exportFile = URI.joinPath(exportRoot, 'decompile.c');
 
-		const analyzeHeadless = `"${URI.joinPath(URI.file(ghidraInstallDir), 'support', 'analyzeHeadless').fsPath}"`;
+		const analyzeHeadless = `"${ghidraAnalyzeHeadlessPath(ghidraInstallDir)}"`;
 		const timeoutSeconds = configurationService.getValue<number>(SolanaEbpfSettingId.TimeoutSeconds) ?? 300;
 
 		await runTerminalCommand(commandService, `mkdir -p "${projectRoot.fsPath}"`);
