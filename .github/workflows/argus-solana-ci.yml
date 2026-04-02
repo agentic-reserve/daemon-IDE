@@ -1,0 +1,46 @@
+# Focused checks for Solana-related IDE + CLI changes (sRFC-35 verifier, etc.).
+name: ARGUS Solana checks
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'vscode/cli/**'
+      - 'vscode/src/vs/workbench/contrib/solana/**'
+      - 'vscode/src/vs/workbench/contrib/solanaExplorer/**'
+      - '.github/workflows/argus-solana-ci.yml'
+  pull_request:
+    paths:
+      - 'vscode/cli/**'
+      - 'vscode/src/vs/workbench/contrib/solana/**'
+      - 'vscode/src/vs/workbench/contrib/solanaExplorer/**'
+      - '.github/workflows/argus-solana-ci.yml'
+
+jobs:
+  rust-domain-association:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: vscode/cli
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: cargo test (domain association)
+        run: cargo test domain_association --lib
+
+  ts-solana-compile-check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: vscode
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: vscode/package-lock.json
+      - name: npm ci
+        run: npm ci
+      - name: TypeScript compile check (native)
+        run: npm run compile-check-ts-native

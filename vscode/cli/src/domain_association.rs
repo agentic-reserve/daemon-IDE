@@ -86,10 +86,32 @@ struct DnsAnswer {
 	data: String,
 }
 
+/// Rejects strings that are not valid base58-encoded 32-byte Solana public keys.
+pub fn validate_solana_address_input(address: &str) -> Result<(), AnyError> {
+	if solana_address_decodes_to_32_bytes(address) {
+		Ok(())
+	} else {
+		Err(wrap(
+			std::io::Error::new(
+				std::io::ErrorKind::InvalidInput,
+				"invalid Solana address",
+			),
+			"address must be a base58-encoded 32-byte public key",
+		)
+		.into())
+	}
+}
+
+fn solana_address_decodes_to_32_bytes(address: &str) -> bool {
+	bs58::decode(address.trim()).into_vec().map(|v| v.len() == 32).unwrap_or(false)
+}
+
 pub async fn verify_domain_association(
 	http: &reqwest::Client,
-	input: VerificationInput,
+	mut input: VerificationInput,
 ) -> Result<VerificationVerdict, AnyError> {
+	input.address = input.address.trim().to_string();
+	validate_solana_address_input(&input.address)?;
 	let mut warnings = Vec::new();
 	let txt_records = fetch_dns_txt(http, &input.domain)
 		.await
@@ -145,13 +167,16 @@ fn evaluate(
 		}
 
 		let Some(address) = &record.address else {
-			if matches!(input.mode, VerificationMode::Minimal) && record.raw.contains(&input.address) {
+			if matches!(input.mode, VerificationMode::Minimal)
+				&& solana_address_decodes_to_32_bytes(&input.address)
+				&& record.raw.contains(input.address.trim())
+			{
 				matched = true;
 			}
 			continue;
 		};
 
-		if !address.eq_ignore_ascii_case(&input.address) {
+		if !address.eq_ignore_ascii_case(input.address.trim()) {
 			continue;
 		}
 
@@ -448,6 +473,8 @@ mod tests {
 		expected_denied: bool,
 	}
 
+	const TEST_PK: &str = "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM";
+
 	#[test]
 	fn fixture_cases_cover_strict_compat_and_minimal() {
 		let fixtures = vec![
@@ -456,9 +483,9 @@ mod tests {
 				mode: VerificationMode::Strict,
 				records: vec![AssociationRecord {
 					source: AssociationSource::DnsTxt,
-					raw: "solana-address=abc network=mainnet".into(),
+					raw: format!("solana-address={TEST_PK} network=mainnet"),
 					address_tag: Some(AddressTag::Address),
-					address: Some("abc".into()),
+					address: Some(TEST_PK.into()),
 					allow: None,
 					deny: None,
 					network: Some("mainnet".into()),
@@ -472,9 +499,9 @@ mod tests {
 				mode: VerificationMode::Compat,
 				records: vec![AssociationRecord {
 					source: AssociationSource::WellKnown,
-					raw: "solana-address=abc deny=1".into(),
+					raw: format!("solana-address={TEST_PK} deny=1"),
 					address_tag: Some(AddressTag::Address),
-					address: Some("abc".into()),
+					address: Some(TEST_PK.into()),
 					allow: None,
 					deny: Some(true),
 					network: Some("mainnet".into()),
@@ -488,7 +515,7 @@ mod tests {
 				mode: VerificationMode::Minimal,
 				records: vec![AssociationRecord {
 					source: AssociationSource::WellKnown,
-					raw: "legacy:abc".into(),
+					raw: format!("legacy:{TEST_PK}"),
 					address_tag: None,
 					address: None,
 					allow: None,
@@ -505,9 +532,9 @@ mod tests {
 				records: vec![
 					AssociationRecord {
 						source: AssociationSource::DnsTxt,
-						raw: "solana-address=abc".into(),
+						raw: format!("solana-address={TEST_PK}"),
 						address_tag: Some(AddressTag::Address),
-						address: Some("abc".into()),
+						address: Some(TEST_PK.into()),
 						allow: Some(true),
 						deny: None,
 						network: Some("mainnet".into()),
@@ -534,7 +561,7 @@ mod tests {
 				case.records,
 				VerificationInput {
 					domain: "example.com".into(),
-					address: "abc".into(),
+					address: TEST_PK.into(),
 					mode: case.mode,
 					network: "mainnet".into(),
 					address_tag: None,
@@ -550,9 +577,9 @@ mod tests {
 	fn deny_record_takes_precedence_for_result() {
 		let records = vec![AssociationRecord {
 			source: AssociationSource::DnsTxt,
-			raw: "solana-address=abc deny=1".into(),
+			raw: format!("solana-address={TEST_PK} deny=1"),
 			address_tag: Some(AddressTag::Address),
-			address: Some("abc".into()),
+			address: Some(TEST_PK.into()),
 			allow: None,
 			deny: Some(true),
 			network: Some("mainnet".into()),
@@ -563,7 +590,7 @@ mod tests {
 			records,
 			VerificationInput {
 				domain: "example.com".into(),
-				address: "abc".into(),
+				address: TEST_PK.into(),
 				mode: VerificationMode::Strict,
 				network: "mainnet".into(),
 				address_tag: None,
@@ -572,5 +599,12 @@ mod tests {
 		);
 		assert!(verdict.denied);
 		assert!(!verdict.matched);
+	}
+
+	#[test]
+	fn invalid_base58_address_fails_validation() {
+		assert!(validate_solana_address_input("abc").is_err());
+		assert!(validate_solana_address_input("").is_err());
+		assert!(validate_solana_address_input("9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM").is_ok());
 	}
 }

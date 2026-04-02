@@ -30,3 +30,7 @@ This workspace ships Solana eBPF decompile commands in ARGUS IDE.
   - Ensure `<ghidraInstallDir>/support/analyzeHeadless` exists and points to your Ghidra root.
 - **"Missing Solana-eBPF-for-Ghidra folder"**
   - Launch ARGUS IDE from this repository root so the sibling module path resolves.
+
+## See also
+
+- On-chain **emergency abort stub** (`sbpf-asm-abort`) build/deploy notes and runbook sketch: [`vscode/docs/solana/sbpf-asm-abort.md`](../../../../../docs/solana/sbpf-asm-abort.md) (upstream: [deanmlittle/sbpf-asm-abort](https://github.com/deanmlittle/sbpf-asm-abort)).

@@ -15,7 +15,7 @@ import { IQuickInputService } from '../../../../platform/quickinput/common/quick
 import { INotificationService, Severity } from '../../../../platform/notification/common/notification.js';
 import { IConfigurationService } from '../../../../platform/configuration/common/configuration.js';
 import { SolanaSettingId } from '../../solana/common/solanaConfiguration.js';
-import { DomainAssociationMode, DomainAssociationRecordType, verifyDomainAssociation } from '../../solana/common/domainAssociation.js';
+import { DomainAssociationMode, DomainAssociationRecordType, isValidSolanaAddress, verifyDomainAssociation } from '../../solana/common/domainAssociation.js';
 import { VIEW_CONTAINER } from '../../files/browser/explorerViewlet.js';
 import { SolanaExplorerCommandId, SolanaExplorerView, SOLANA_EXPLORER_VIEW_ID } from './solanaExplorerView.js';
 
@@ -84,6 +84,10 @@ registerAction2(class extends Action2 {
 
 		const address = await quickInput.input({ prompt: localize('solana.explorer.verify.address.prompt', "Enter Solana address") });
 		if (!address) {
+			return;
+		}
+		if (!isValidSolanaAddress(address)) {
+			notificationService.error(localize('solana.explorer.verify.invalidAddress', "Enter a valid Solana address (base58, 32-byte public key)."));
 			return;
 		}
 

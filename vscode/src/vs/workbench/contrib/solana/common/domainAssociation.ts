@@ -55,11 +55,67 @@ interface DnsResolveResult {
 	Answer?: Array<{ data?: string }>;
 }
 
+const BASE58_ALPHABET = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+
+/** True if `address` decodes to exactly 32 bytes (typical Solana public key). */
+export function isValidSolanaAddress(address: string): boolean {
+	const t = address.trim();
+	if (!t) {
+		return false;
+	}
+	try {
+		return decodeBase58(t).length === 32;
+	} catch {
+		return false;
+	}
+}
+
+function decodeBase58(str: string): Uint8Array {
+	const bytes: number[] = [0];
+	for (let i = 0; i < str.length; i++) {
+		const value = BASE58_ALPHABET.indexOf(str[i]);
+		if (value < 0) {
+			throw new Error('invalid base58 character');
+		}
+		let carry = value;
+		for (let j = 0; j < bytes.length; j++) {
+			carry += bytes[j] * 58;
+			bytes[j] = carry & 0xff;
+			carry >>= 8;
+		}
+		while (carry > 0) {
+			bytes.push(carry & 0xff);
+			carry >>= 8;
+		}
+	}
+	for (let k = 0; k < str.length && str[k] === '1'; k++) {
+		bytes.push(0);
+	}
+	return Uint8Array.from(bytes.reverse());
+}
+
 export async function verifyDomainAssociation(
 	domain: string,
 	address: string,
 	options: DomainAssociationVerificationOptions,
 ): Promise<DomainAssociationVerificationResult> {
+	const trimmed = address.trim();
+	if (!isValidSolanaAddress(trimmed)) {
+		return {
+			domain,
+			address: trimmed,
+			recordType: options.recordType,
+			network: options.network,
+			mode: options.mode,
+			source: [],
+			matched: false,
+			denied: false,
+			reason: 'Invalid Solana address: expected base58-encoded 32-byte public key',
+			warnings: [],
+			recordsConsidered: 0,
+		};
+	}
+
 	const warnings: string[] = [];
 	const strictFirst = options.mode === DomainAssociationMode.Strict;
 	const source = new Set<DomainAssociationSource>();
@@ -83,7 +139,7 @@ export async function verifyDomainAssociation(
 		}
 	}
 
-	const verdict = evaluate(parsed, domain, address, options, warnings);
+	const verdict = evaluate(parsed, domain, trimmed, options, warnings);
 	return {
 		...verdict,
 		source: Array.from(source.values()),
@@ -109,7 +165,7 @@ function evaluate(
 		}
 
 		if (!record.address) {
-			if (options.mode === DomainAssociationMode.Minimal && record.raw.includes(address)) {
+			if (options.mode === DomainAssociationMode.Minimal && isValidSolanaAddress(address) && record.raw.includes(address)) {
 				matched = true;
 			}
 			continue;
