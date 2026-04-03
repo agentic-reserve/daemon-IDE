@@ -1,0 +1,209 @@
+name: ARES Security Auditor
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      scan_type:
+        description: 'Type of scan'
+        required: true
+        default: 'full'
+        type: choice
+        options:
+          - full
+          - quick
+          - blockchain
+          - ai-security
+          - mcp-security
+
+env:
+  ARES_API_URL: https://api.aressystem.dev
+
+jobs:
+  ares-health:
+    name: Check ARES System Health
+    runs-on: ubuntu-latest
+    steps:
+      - name: Health Check
+        run: |
+          response=$(curl -s $ARES_API_URL/health)
+          echo "ARES Health: $response"
+          if echo "$response" | grep -q '"status":"ok"'; then
+            echo "ARES system is operational"
+          else
+            echo "Warning: ARES system may have issues"
+          fi
+
+  security-audit:
+    name: ARES Security Audit
+    runs-on: ubuntu-latest
+    needs: ares-health
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Comprehensive Security Audit
+        if: github.event.inputs.scan_type == 'full' || github.event.inputs.scan_type == ''
+        run: |
+          curl -X POST $ARES_API_URL/api/multi-agent/tasks/security-audit \
+            -H "Content-Type: application/json" \
+            -d '{
+              "scope": ["ai-security", "mcp-security", "general"]
+            }' | tee ares-audit.json
+          
+          # Parse and format results
+          if [ -f ares-audit.json ]; then
+            echo "## ARES Security Audit Results" >> $GITHUB_STEP_SUMMARY
+            cat ares-audit.json | jq -r '.summary // empty' >> $GITHUB_STEP_SUMMARY || true
+          fi
+
+      - name: Run Blockchain Security Scan
+        if: github.event.inputs.scan_type == 'blockchain'
+        run: |
+          # Find Solana/Rust files
+          SOLANA_FILES=$(find . -name "*.rs" -o -name "*.ts" | grep -E "(solana|mcp|wallet)" | head -20)
+          
+          if [ -n "$SOLANA_FILES" ]; then
+            curl -X POST $ARES_API_URL/api/multi-agent/autonomous \
+              -H "Content-Type: application/json" \
+              -d "{
+                \"prompt\": \"Audit this codebase for Solana blockchain security vulnerabilities: $SOLANA_FILES\"
+              }"
+          fi
+
+      - name: Run AI Security Scan
+        if: github.event.inputs.scan_type == 'ai-security'
+        run: |
+          curl -X POST $ARES_API_URL/api/fuzzyai/attack-types \
+            -H "Content-Type: application/json"
+          
+          # Test for prompt injection
+          AI_FILES=$(find . -path ./node_modules -prune -o -name "*.ts" -print | xargs grep -l -E "(prompt|llm|agent|mcp)" 2>/dev/null | head -10)
+          
+          if [ -n "$AI_FILES" ]; then
+            for file in $AI_FILES; do
+              curl -X POST $ARES_API_URL/api/whistleblower/extract \
+                -H "Content-Type: application/json" \
+                -d "{\"target\": \"$file\"}"
+            done
+          fi
+
+      - name: Run MCP Security Scan
+        if: github.event.inputs.scan_type == 'mcp-security'
+        run: |
+          MCP_CONFIGS=$(find . -name "mcp.json" -o -name "*mcp*.json" 2>/dev/null | head -10)
+          
+          if [ -n "$MCP_CONFIGS" ]; then
+            for config in $MCP_CONFIGS; do
+              curl -X POST $ARES_API_URL/api/mcp-injection/test \
+                -H "Content-Type: application/json" \
+                -d "{\"target\": \"$config\"}"
+            done
+          fi
+
+  semgrep-analysis:
+    name: Semgrep Static Analysis
+    runs-on: ubuntu-latest
+    needs: ares-health
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Semgrep Analysis
+        run: |
+          curl -X POST $ARES_API_URL/api/semgrep/analyze \
+            -H "Content-Type: application/json" \
+            -d '{
+              "targets": ["vscode/src"],
+              "rules": ["security", "correctness"]
+            }' | tee semgrep-results.json
+          
+          # Check for findings
+          CRITICAL=$(cat semgrep-results.json | jq -r '.findings[] | select(.severity == "critical") | .location' 2>/dev/null | wc -l)
+          HIGH=$(cat semgrep-results.json | jq -r '.findings[] | select(.severity == "high") | .location' 2>/dev/null | wc -l)
+          
+          echo "Critical findings: $CRITICAL"
+          echo "High findings: $HIGH"
+          
+          if [ "$CRITICAL" -gt 0 ]; then
+            echo "::error::Critical security findings detected!"
+            exit 1
+          fi
+
+  trident-fuzzing:
+    name: Solana Program Fuzzing
+    runs-on: ubuntu-latest
+    needs: ares-health
+    if: contains(github.event.inputs.scan_type, 'blockchain') || github.event.inputs.scan_type == ''
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Find Solana Programs
+        id: find_programs
+        run: |
+          PROGRAMS=$(find . -name "*.so" -o -name "program.so" 2>/dev/null | head -5)
+          echo "programs=$PROGRAMS" >> $GITHUB_OUTPUT
+          echo "Found programs: $PROGRAMS"
+
+      - name: Run Trident Fuzzing
+        if: steps.find_programs.outputs.programs != ''
+        run: |
+          for program in ${{ steps.find_programs.outputs.programs }}; do
+            curl -X POST $ARES_API_URL/api/trident/fuzz/run \
+              -H "Content-Type: application/json" \
+              -d "{
+                \"program\": \"$program\",
+                \"duration\": 120000
+              }"
+          done
+
+  pentest:
+    name: HexStrike Penetration Testing
+    runs-on: ubuntu-latest
+    needs: ares-health
+    if: contains(github.event.inputs.scan_type, 'web') || contains(github.event.inputs.scan_type, 'network')
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run HexStrike Recon
+        run: |
+          curl -X POST $ARES_API_URL/api/hexstrike/execute \
+            -H "Content-Type: application/json" \
+            -d '{
+              "target": "localhost",
+              "technique": "reconnaissance"
+            }'
+
+  summary:
+    name: Audit Summary
+    runs-on: ubuntu-latest
+    needs: [security-audit, semgrep-analysis, trident-fuzzing]
+    if: always()
+    steps:
+      - name: Generate Summary
+        run: |
+          echo "## ARES Security Audit Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Check | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "$NEEDS_SECURITY_AUDIT" == "success" ]; then
+            echo "| Security Audit | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| Security Audit | ❌ Failed |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ "$NEEDS_SEMGREP_ANALYSIS" == "success" ]; then
+            echo "| Semgrep Analysis | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| Semgrep Analysis | ❌ Failed |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Full audit report: [ARES Dashboard]($ARES_API_URL)" >> $GITHUB_STEP_SUMMARY
+        env:
+          NEEDS_SECURITY_AUDIT: ${{ needs.security-audit.result }}
+          NEEDS_SEMGREP_ANALYSIS: ${{ needs.semgrep-analysis.result }}

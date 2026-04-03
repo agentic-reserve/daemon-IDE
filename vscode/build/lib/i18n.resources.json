@@ -215,6 +215,18 @@
 			"project": "vscode-workbench"
 		},
 		{
+			"name": "vs/workbench/contrib/solana",
+			"project": "vscode-workbench"
+		},
+		{
+			"name": "vs/workbench/contrib/solanaEbpf",
+			"project": "vscode-workbench"
+		},
+		{
+			"name": "vs/workbench/contrib/solanaExplorer",
+			"project": "vscode-workbench"
+		},
+		{
 			"name": "vs/workbench/contrib/format",
 			"project": "vscode-workbench"
 		},

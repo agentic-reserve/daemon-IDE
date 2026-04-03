@@ -14,7 +14,7 @@ Threat model B extends A by including Solana developer workflows that interact w
   - RPC URL is user-configurable and defaults to devnet.
 - **Open questions**
   - Will wallet features ever sign and send **mainnet** transactions by default?
-  - Will SolIDE allow extensions/agents to trigger wallet/anchor actions non-interactively?
+  - Will ARES allow extensions/agents to trigger wallet/anchor actions non-interactively?
   - Should the IDE enforce an allowlist of RPC endpoints?
 
 ## System model
@@ -55,7 +55,7 @@ W --> T["Terminal"]
 T --> CLI["solana-keygen / anchor / solana"]
 U --> E["Solana Explorer"]
 E --> RPC["Solana RPC"]
-U --> C["SolIDE Chat Provider"]
+U --> C["ARES Chat Provider"]
 C --> A["AI Provider Service"]
 C --> R["MCP Tool Router"]
 ```

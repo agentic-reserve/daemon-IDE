@@ -484,6 +484,8 @@ pub enum CodeError {
 	AuthChallengeNotIssued,
 	#[error("challenge token is invalid")]
 	AuthChallengeBadToken,
+	#[error("too many authentication attempts, retry in {0}ms")]
+	AuthRateLimited(u64),
 	#[error("unauthorized client refused")]
 	AuthMismatch,
 	#[error("keyring communication timed out after 5s")]

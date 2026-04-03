@@ -225,6 +225,7 @@ export class ChatModeService extends Disposable implements IChatModeService {
 			builtinModes.unshift(ChatMode.Agent);
 		}
 		builtinModes.push(ChatMode.Edit);
+        // Audit mode is handled via the new Audit surface (see Route B) but not added here to avoid breaking types
 		return builtinModes;
 	}
 
@@ -545,15 +546,15 @@ export class BuiltinChatMode implements IChatMode {
 }
 
 export namespace ChatMode {
-	export const Ask = new BuiltinChatMode(ChatModeKind.Ask, 'Ask', localize('chatDescription', "Explore and understand your code"), Codicon.question);
-	export const Edit = new BuiltinChatMode(ChatModeKind.Edit, 'Edit', localize('editsDescription', "Edit or refactor selected code"), Codicon.edit);
-	export const Agent = new BuiltinChatMode(ChatModeKind.Agent, 'Agent', localize('agentDescription', "Describe what to build"), Codicon.agent);
+    export const Ask = new BuiltinChatMode(ChatModeKind.Ask, 'Ask', localize('chatDescription', "Explore and understand your code"), Codicon.question);
+    export const Edit = new BuiltinChatMode(ChatModeKind.Edit, 'Edit', localize('editsDescription', "Edit or refactor selected code"), Codicon.edit);
+    export const Agent = new BuiltinChatMode(ChatModeKind.Agent, 'Agent', localize('agentDescription', "Describe what to build"), Codicon.agent);
 }
 
 export function isBuiltinChatMode(mode: IChatMode): boolean {
-	return mode.id === ChatMode.Ask.id ||
-		mode.id === ChatMode.Edit.id ||
-		mode.id === ChatMode.Agent.id;
+    return mode.id === ChatMode.Ask.id ||
+        mode.id === ChatMode.Edit.id ||
+        mode.id === ChatMode.Agent.id;
 }
 
 /**

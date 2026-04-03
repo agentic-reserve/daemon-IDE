@@ -6,6 +6,7 @@
 use async_trait::async_trait;
 use base64::{engine::general_purpose as b64, Engine as _};
 use futures::{stream::FuturesUnordered, StreamExt};
+use rand::distributions::{Alphanumeric, DistString};
 use serde::Serialize;
 use sha2::{Digest, Sha256};
 use std::{
@@ -148,14 +149,41 @@ pub async fn command_shell(ctx: CommandContext, args: CommandShellArgs) -> Resul
 		shutdown_reqs.push(ShutdownRequest::ParentProcessKilled(p));
 	}
 
+	let is_network_exposed = args.on_socket || !args.on_port.is_empty() || args.on_host.is_some();
+	#[cfg(not(feature = "vsda"))]
+	let requires_auth = if is_network_exposed {
+		let token = args.require_token.clone().unwrap_or_else(|| {
+			Alphanumeric.sample_string(&mut rand::thread_rng(), 24)
+		});
+
+		if args.require_token.is_none() {
+			ctx.log.result(format!("Connection token: {token}"));
+		}
+
+		AuthRequired::VSDAWithToken(token)
+	} else {
+		AuthRequired::VSDA
+	};
+
+	#[cfg(feature = "vsda")]
+	let requires_auth = args
+		.require_token
+		.map(AuthRequired::VSDAWithToken)
+		.unwrap_or_else(|| {
+			if is_network_exposed {
+				let token = Alphanumeric.sample_string(&mut rand::thread_rng(), 24);
+				ctx.log.result(format!("Connection token: {token}"));
+				AuthRequired::VSDAWithToken(token)
+			} else {
+				AuthRequired::VSDA
+			}
+		});
+
 	let mut params = ServeStreamParams {
 		log: ctx.log,
 		launcher_paths: ctx.paths,
 		platform,
-		requires_auth: args
-			.require_token
-			.map(AuthRequired::VSDAWithToken)
-			.unwrap_or(AuthRequired::VSDA),
+		requires_auth,
 		exit_barrier: ShutdownRequest::create_rx(shutdown_reqs),
 		code_server_args: (&ctx.args).into(),
 	};

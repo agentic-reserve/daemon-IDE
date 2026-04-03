@@ -1,5 +1,5 @@
 ## Executive summary
-SolIDE’s highest-risk surfaces in scope are the **agent loop** (LLM requests + streaming tool calls), **MCP tool execution**, and **x402 payment retry** handling. The dominant risk themes are (1) **tool/prompt injection leading to unintended privileged actions**, (2) **secrets and payment credential exposure via logs/UI**, and (3) **supply-chain / remote-tool integrity** when calling external MCP servers.
+ARES’s highest-risk surfaces in scope are the **agent loop** (LLM requests + streaming tool calls), **MCP tool execution**, and **x402 payment retry** handling. The dominant risk themes are (1) **tool/prompt injection leading to unintended privileged actions**, (2) **secrets and payment credential exposure via logs/UI**, and (3) **supply-chain / remote-tool integrity** when calling external MCP servers.
 
 ## Scope and assumptions
 - **In-scope paths**
@@ -15,43 +15,43 @@ SolIDE’s highest-risk surfaces in scope are the **agent loop** (LLM requests +
   - x402 payments are **manual paste-and-retry** (no automatic signing in-app).
   - MCP servers can be **stdio** (local) or **http** (remote) based on `.cursor/mcp.json`.
 - **Open questions that would materially change risk**
-  - Will SolIDE expose any agent/tool endpoints over the network (shared IDE sessions, remote control, “agent server”)?
+  - Will ARES expose any agent/tool endpoints over the network (shared IDE sessions, remote control, “agent server”)?
   - Will x402 move from paste-and-retry to **automatic** on-device signing?
   - Will you allow arbitrary MCP servers by default, or enforce a strict allowlist?
 
 ## System model
 ### Primary components
-- **Chat model provider (SolIDE)**: Implements `ILanguageModelChatProvider` and loops over tool calls. Evidence: `vscode/src/vs/workbench/contrib/chat/browser/solanaIdeLanguageModel.contribution.ts`
+- **Chat model provider (ARES)**: Implements `ILanguageModelChatProvider` and loops over tool calls. Evidence: `vscode/src/vs/workbench/contrib/chat/browser/solanaIdeLanguageModel.contribution.ts`
 - **AI provider service**: Sends LLM requests to OpenAI-compatible endpoints (OpenRouter/OpenAI/Daemon/Ollama) and parses streaming deltas incl. `tool_calls`. Evidence: `vscode/src/vs/workbench/services/aiProvider/common/aiProviderService.ts`
 - **x402 readiness layer**: Detects HTTP 402 and preserves headers/body in a structured error. Evidence: `vscode/src/vs/workbench/services/aiProvider/common/x402Http.ts`
 - **MCP tool router**: Exposes MCP tools as OpenAI “function tools” and executes tool calls after approval. Evidence: `vscode/src/vs/workbench/services/aiProvider/common/mcpToolRouter.ts`
 - **MCP server configuration**: Declares configured MCP servers (stdio + http). Evidence: `vscode/.cursor/mcp.json`
 
 ### Data flows and trust boundaries
-- **User → SolIDE Chat UI → Agent loop**
+- **User → ARES Chat UI → Agent loop**
   - **Data**: prompts, workspace context, approvals.
   - **Channel**: in-process.
   - **Guarantees**: implicit local user; approval prompt exists for tool execution. Evidence: `mcpToolRouter.ts` approval `pick()`.
-- **SolIDE → LLM provider (OpenRouter/OpenAI-compatible)**
+- **ARES → LLM provider (OpenRouter/OpenAI-compatible)**
   - **Data**: prompts, tool schemas, tool results, model outputs.
   - **Channel**: outbound HTTPS (or configured base URL). Evidence: `_sendOpenAiCompatible()` in `aiProviderService.ts`.
   - **Guarantees**: API key from secret storage; no explicit per-request redaction beyond not logging headers. Evidence: `_getApiKey()` uses `ISecretStorageService`.
-- **LLM provider → SolIDE (streaming)**
+- **LLM provider → ARES (streaming)**
   - **Data**: streamed deltas, tool calls, usage.
   - **Channel**: HTTP response stream (SSE-like). Evidence: `_postOpenAiStreaming()` line parsing of `data:`.
   - **Guarantees**: JSON parsing best-effort; tool call arguments parsed from JSON string.
-- **SolIDE → MCP servers**
+- **ARES → MCP servers**
   - **Data**: tool name + args; potentially sensitive outputs.
   - **Channel**: local stdio or remote HTTP depending on server type. Evidence: `.cursor/mcp.json` includes `type: "stdio"` and `type: "http"`.
   - **Guarantees**: user approval; allowlist policy for servers/tools (deny by policy). Evidence: `solide.ai.mcp.allowedServers/tools` usage in `mcpToolRouter.ts`.
-- **SolIDE ↔ x402 payment-required**
+- **ARES ↔ x402 payment-required**
   - **Data**: `PAYMENT-REQUIRED` header, pasted `PAYMENT-SIGNATURE`.
   - **Channel**: HTTP 402 then retry once. Evidence: 402 branch in `_postOpenAiStreaming()` and `fetchWithX402Readiness()`.
 
 #### Diagram
 ```mermaid
 flowchart TD
-U["User"] --> S["SolIDE Chat Provider"]
+U["User"] --> S["ARES Chat Provider"]
 S --> A["AI Provider Service"]
 A --> L["LLM Provider"]
 L --> A

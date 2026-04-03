@@ -104,6 +104,7 @@ import { ChatDebugEditor } from './chatDebug/chatDebugEditor.js';
 import { PromptsDebugContribution } from './promptsDebugContribution.js';
 import { ChatDebugEditorInput, ChatDebugEditorInputSerializer } from './chatDebug/chatDebugEditorInput.js';
 import './agentSessions/agentSessions.contribution.js';
+// Audit integration disabled for baseline stabilization (Route B will reintroduce via a separate extension surface)
 
 import { ChatContextKeys } from '../common/actions/chatContextKeys.js';
 

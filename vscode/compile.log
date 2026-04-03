@@ -1,0 +1,267 @@
+npm warn Unknown project config "disturl". This will stop working in the next major version of npm.
+npm warn Unknown project config "target". This will stop working in the next major version of npm.
+npm warn Unknown project config "ms_build_id". This will stop working in the next major version of npm.
+npm warn Unknown project config "runtime". This will stop working in the next major version of npm.
+npm warn Unknown project config "build_from_source". This will stop working in the next major version of npm.
+npm warn Unknown project config "timeout". This will stop working in the next major version of npm.
+
+> sol-ide-dev@1.104.0 compile
+> npm run gulp compile
+
+npm warn Unknown env config "runtime". This will stop working in the next major version of npm.
+npm warn Unknown env config "build-from-source". This will stop working in the next major version of npm.
+npm warn Unknown env config "ms-build-id". This will stop working in the next major version of npm.
+npm warn Unknown env config "target". This will stop working in the next major version of npm.
+npm warn Unknown env config "disturl". This will stop working in the next major version of npm.
+npm warn Unknown env config "timeout". This will stop working in the next major version of npm.
+npm warn Unknown project config "disturl". This will stop working in the next major version of npm.
+npm warn Unknown project config "target". This will stop working in the next major version of npm.
+npm warn Unknown project config "ms_build_id". This will stop working in the next major version of npm.
+npm warn Unknown project config "runtime". This will stop working in the next major version of npm.
+npm warn Unknown project config "build_from_source". This will stop working in the next major version of npm.
+npm warn Unknown project config "timeout". This will stop working in the next major version of npm.
+
+> sol-ide-dev@1.104.0 gulp
+> node --max-old-space-size=8192 ./node_modules/gulp/bin/gulp.js compile
+
+[20:32:33] Using gulpfile ~/daemon-IDE/vscode/gulpfile.mjs
+[20:32:33] Starting 'compile'...
+[20:32:33] Starting [36mmonaco-typecheck[39m ...
+[20:32:33] Starting [36mclean-out[39m ...
+[20:32:33] Starting [36mclean-extension-configuration-editing[39m ...
+[20:32:33] Starting [36mclean-extension-css-language-features-client[39m ...
+[20:32:33] Starting [36mclean-extension-css-language-features-server[39m ...
+[20:32:33] Starting [36mclean-extension-debug-auto-launch[39m ...
+[20:32:33] Starting [36mclean-extension-debug-server-ready[39m ...
+[20:32:33] Starting [36mclean-extension-emmet[39m ...
+[20:32:33] Starting [36mclean-extension-extension-editing[39m ...
+[20:32:33] Starting [36mclean-extension-git[39m ...
+[20:32:33] Starting [36mclean-extension-git-base[39m ...
+[20:32:33] Starting [36mclean-extension-github[39m ...
+[20:32:33] Starting [36mclean-extension-github-authentication[39m ...
+[20:32:33] Starting [36mclean-extension-html-language-features-client[39m ...
+[20:32:33] Starting [36mclean-extension-html-language-features-server[39m ...
+[20:32:33] Starting [36mclean-extension-json-language-features-client[39m ...
+[20:32:33] Starting [36mclean-extension-json-language-features-server[39m ...
+[20:32:33] Starting [36mclean-extension-markdown-language-features[39m ...
+[20:32:33] Starting [36mclean-extension-markdown-math[39m ...
+[20:32:33] Starting [36mclean-extension-media-preview[39m ...
+[20:32:33] Starting [36mclean-extension-merge-conflict[39m ...
+[20:32:33] Starting [36mclean-extension-mermaid-chat-features[39m ...
+[20:32:33] Starting [36mclean-extension-terminal-suggest[39m ...
+[20:32:33] Starting [36mclean-extension-microsoft-authentication[39m ...
+[20:32:33] Starting [36mclean-extension-notebook-renderers[39m ...
+[20:32:33] Starting [36mclean-extension-npm[39m ...
+[20:32:33] Starting [36mclean-extension-references-view[39m ...
+[20:32:33] Starting [36mclean-extension-search-result[39m ...
+[20:32:33] Starting [36mclean-extension-simple-browser[39m ...
+[20:32:33] Starting [36mclean-extension-tunnel-forwarding[39m ...
+[20:32:33] Starting [36mclean-extension-typescript-language-features-web[39m ...
+[20:32:33] Starting [36mclean-extension-typescript-language-features[39m ...
+[20:32:33] Starting [36mclean-extension-vscode-selfhost-test-provider[39m ...
+[20:32:33] Starting [36mclean-extension-vscode-selfhost-import-aid[39m ...
+[20:32:33] Starting [36mclean-extension-vscode-extras[39m ...
+[20:32:33] Starting [36mcompile-extension-media[39m ...
+[20:32:33] Finished [36mclean-extension-debug-auto-launch[39m after [35m33 ms[39m
+[20:32:33] Starting [36mcompile-extension:debug-auto-launch[39m ...
+(node:46855) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[20:32:33] Finished [36mclean-extension-debug-server-ready[39m after [35m46 ms[39m
+[20:32:33] Starting [36mcompile-extension:debug-server-ready[39m ...
+[20:32:33] Finished [36mclean-extension-extension-editing[39m after [35m50 ms[39m
+[20:32:33] Starting [36mcompile-extension:extension-editing[39m ...
+[20:32:33] Finished [36mclean-extension-markdown-math[39m after [35m70 ms[39m
+[20:32:33] Starting [36mcompile-extension:markdown-math[39m ...
+[20:32:33] Finished [36mclean-extension-merge-conflict[39m after [35m74 ms[39m
+[20:32:33] Starting [36mcompile-extension:merge-conflict[39m ...
+[20:32:33] Finished [36mclean-extension-simple-browser[39m after [35m76 ms[39m
+[20:32:33] Starting [36mcompile-extension:simple-browser[39m ...
+[20:32:33] Finished [36mclean-extension-tunnel-forwarding[39m after [35m88 ms[39m
+[20:32:33] Starting [36mcompile-extension:tunnel-forwarding[39m ...
+[20:32:33] Finished [36mclean-extension-typescript-language-features-web[39m after [35m112 ms[39m
+[20:32:33] Starting [36mcompile-extension:typescript-language-features-web[39m ...
+[20:32:33] Finished [36mclean-extension-vscode-selfhost-import-aid[39m after [35m145 ms[39m
+[20:32:33] Starting [36mcompile-extension:vscode-selfhost-import-aid[39m ...
+[20:32:33] Finished [36mclean-extension-vscode-extras[39m after [35m147 ms[39m
+[20:32:33] Starting [36mcompile-extension:vscode-extras[39m ...
+[20:32:33] Finished [36mclean-extension-vscode-selfhost-test-provider[39m after [35m154 ms[39m
+[20:32:33] Starting [36mcompile-extension:vscode-selfhost-test-provider[39m ...
+[20:32:33] Finished [36mclean-extension-configuration-editing[39m after [35m432 ms[39m
+[20:32:33] Starting [36mcompile-extension:configuration-editing[39m ...
+[20:32:33] Finished [36mclean-extension-css-language-features-client[39m after [35m435 ms[39m
+[20:32:33] Starting [36mcompile-extension:css-language-features-client[39m ...
+[20:32:33] Finished [32mesbuilding extension media[39m /Users/macbook/daemon-IDE/vscode/extensions/markdown-language-features/esbuild.webview.mts with 0 errors.
+[20:32:33] Finished [32mesbuilding extension media[39m /Users/macbook/daemon-IDE/vscode/extensions/simple-browser/esbuild.webview.mts with 0 errors.
+[20:32:33] Finished [32mesbuilding extension media[39m /Users/macbook/daemon-IDE/vscode/extensions/markdown-language-features/esbuild.notebook.mts with 0 errors.
+[20:32:33] Finished [36mclean-extension-css-language-features-server[39m after [35m520 ms[39m
+[20:32:33] Starting [36mcompile-extension:css-language-features-server[39m ...
+[20:32:33] Finished [36mclean-extension-github[39m after [35m527 ms[39m
+[20:32:33] Starting [36mcompile-extension:github[39m ...
+[20:32:33] Finished [36mclean-extension-git[39m after [35m571 ms[39m
+[20:32:33] Starting [36mcompile-extension:git[39m ...
+[20:32:33] Finished [36mclean-extension-html-language-features-client[39m after [35m619 ms[39m
+[20:32:33] Starting [36mcompile-extension:html-language-features-client[39m ...
+[20:32:33] Finished [36mclean-extension-emmet[39m after [35m627 ms[39m
+[20:32:33] Starting [36mcompile-extension:emmet[39m ...
+[20:32:33] Finished [36mclean-extension-json-language-features-client[39m after [35m636 ms[39m
+[20:32:33] Starting [36mcompile-extension:json-language-features-client[39m ...
+[20:32:33] Finished [36mclean-extension-mermaid-chat-features[39m after [35m650 ms[39m
+[20:32:33] Starting [36mcompile-extension:mermaid-chat-features[39m ...
+[20:32:33] Finished [36mclean-extension-json-language-features-server[39m after [35m660 ms[39m
+[20:32:33] Starting [36mcompile-extension:json-language-features-server[39m ...
+[20:32:33] Finished [36mclean-extension-media-preview[39m after [35m672 ms[39m
+[20:32:33] Starting [36mcompile-extension:media-preview[39m ...
+[20:32:33] Finished [36mclean-extension-notebook-renderers[39m after [35m774 ms[39m
+[20:32:33] Starting [36mcompile-extension:notebook-renderers[39m ...
+[20:32:33] Finished [36mclean-extension-npm[39m after [35m786 ms[39m
+[20:32:33] Starting [36mcompile-extension:npm[39m ...
+[20:32:33] Finished [36mclean-extension-search-result[39m after [35m800 ms[39m
+[20:32:33] Starting [36mcompile-extension:search-result[39m ...
+[20:32:33] Finished [36mclean-extension-references-view[39m after [35m804 ms[39m
+[20:32:33] Starting [36mcompile-extension:references-view[39m ...
+[20:32:33] Finished [36mclean-extension-git-base[39m after [35m819 ms[39m
+[20:32:33] Starting [36mcompile-extension:git-base[39m ...
+[20:32:34] Finished [32mesbuilding extension media[39m /Users/macbook/daemon-IDE/vscode/extensions/notebook-renderers/esbuild.notebook.mts with 0 errors.
+[20:32:34] Finished [32mesbuilding extension media[39m /Users/macbook/daemon-IDE/vscode/extensions/markdown-math/esbuild.notebook.mts with 0 errors.
+[20:32:34] Finished [32mesbuilding extension media[39m /Users/macbook/daemon-IDE/vscode/extensions/mermaid-chat-features/esbuild.webview.mts with 0 errors.
+[20:32:34] Finished [36mcompile-extension-media[39m after [35m1247 ms[39m
+[20:32:34] Finished [36mclean-extension-github-authentication[39m after [35m1421 ms[39m
+[20:32:34] Starting [36mcompile-extension:github-authentication[39m ...
+[20:32:34] Finished [36mclean-extension-markdown-language-features[39m after [35m1436 ms[39m
+[20:32:34] Starting [36mcompile-extension:markdown-language-features[39m ...
+[20:32:34] Finished [36mclean-extension-microsoft-authentication[39m after [35m1440 ms[39m
+[20:32:34] Starting [36mcompile-extension:microsoft-authentication[39m ...
+[20:32:34] Finished [36mclean-extension-typescript-language-features[39m after [35m1817 ms[39m
+[20:32:34] Starting [36mcompile-extension:typescript-language-features[39m ...
+[20:32:35] Finished [36mcompile-extension:markdown-math[39m after [35m2710 ms[39m
+[20:32:36] Finished [36mclean-extension-terminal-suggest[39m after [35m3114 ms[39m
+[20:32:36] Starting [36mcompile-extension:terminal-suggest[39m ...
+[20:32:36] Finished [36mcompile-extension:debug-auto-launch[39m after [35m3084 ms[39m
+[20:32:36] Finished [36mcompile-extension:vscode-extras[39m after [35m2969 ms[39m
+[20:32:36] Finished [36mcompile-extension:debug-server-ready[39m after [35m3370 ms[39m
+[20:32:36] Finished [36mcompile-extension:vscode-selfhost-import-aid[39m after [35m3272 ms[39m
+[20:32:36] Finished [36mcompile-extension:tunnel-forwarding[39m after [35m3501 ms[39m
+[20:32:36] Finished [36mclean-extension-html-language-features-server[39m after [35m3768 ms[39m
+[20:32:36] Starting [36mcompile-extension:html-language-features-server[39m ...
+[20:32:37] Finished [36mcompile-extension:simple-browser[39m after [35m3922 ms[39m
+[20:32:37] Finished [36mcompile-extension:search-result[39m after [35m3262 ms[39m
+[20:32:37] Finished [36mcompile-extension:extension-editing[39m after [35m4024 ms[39m
+[20:32:37] Finished [36mcompile-extension:mermaid-chat-features[39m after [35m3427 ms[39m
+[20:32:37] Finished [36mcompile-extension:html-language-features-client[39m after [35m3466 ms[39m
+[20:32:37] Finished [36mcompile-extension:json-language-features-client[39m after [35m3443 ms[39m
+[20:32:37] Finished [36mclean-out[39m after [35m4089 ms[39m
+[20:32:37] Starting [36mcopy-codicons[39m ...
+[20:32:37] Finished [36mcopy-codicons[39m after [35m1 ms[39m
+[20:32:37] Starting [36mcompile-api-proposal-names[39m ...
+[20:32:37] Starting [32mcompilation[39m[34m api-proposal-names[39m...
+[20:32:37] Finished [36mcompile-extension:css-language-features-client[39m after [35m3666 ms[39m
+[20:32:37] Finished [36mcompile-extension:configuration-editing[39m after [35m3669 ms[39m
+[20:32:37] Finished [36mcompile-extension:json-language-features-server[39m after [35m3439 ms[39m
+[20:32:37] Finished [36mcompile-extension:merge-conflict[39m after [35m4028 ms[39m
+[20:32:37] Finished [36mcompile-extension:typescript-language-features-web[39m after [35m3997 ms[39m
+[20:32:37] Finished [36mcompile-extension:git-base[39m after [35m3294 ms[39m
+[20:32:37] Finished [36mcompile-extension:media-preview[39m after [35m3420 ms[39m
+[20:32:37] Finished [36mcompile-extension:npm[39m after [35m3328 ms[39m
+[20:32:37] Finished [36mcompile-extension:references-view[39m after [35m3310 ms[39m
+[20:32:37] Finished [36mcompile-extension:notebook-renderers[39m after [35m3342 ms[39m
+[20:32:37] Finished [36mcompile-extension:css-language-features-server[39m after [35m3599 ms[39m
+[20:32:37] Finished [36mcompile-extension:vscode-selfhost-test-provider[39m after [35m3970 ms[39m
+[20:32:37] Finished [36mcompile-extension:github[39m after [35m3599 ms[39m
+[20:32:37] Finished [36mcompile-extension:github-authentication[39m after [35m2711 ms[39m
+[20:32:37] Finished [36mcompile-extension:microsoft-authentication[39m after [35m2704 ms[39m
+[20:32:37] Finished [36mcompile-extension:emmet[39m after [35m3531 ms[39m
+[20:32:37] Finished [36mcompile-extension:git[39m after [35m3612 ms[39m
+[20:32:37] Finished [36mcompile-extension:markdown-language-features[39m after [35m2769 ms[39m
+[20:32:37] Finished [36mcompile-extension:typescript-language-features[39m after [35m2543 ms[39m
+(node:46855) [DEP0180] DeprecationWarning: fs.Stats constructor is deprecated.
+[20:32:37] Finished [32mcompilation[39m[34m api-proposal-names[39m with 0 errors after [35m316 ms[39m
+[20:32:37] Finished [36mcompile-api-proposal-names[39m after [35m318 ms[39m
+[20:32:37] Starting [36mcompile-extension-point-names[39m ...
+[20:32:37] Starting [32mcompilation[39m[34m extension-point-names[39m...
+[20:32:37] Finished [36mcompile-extension:html-language-features-server[39m after [35m714 ms[39m
+[20:32:37] Finished [36mcompile-extension:terminal-suggest[39m after [35m1378 ms[39m
+[20:32:37] Starting [36mcompile-extensions[39m ...
+[20:32:37] Finished [36mcompile-extensions[39m after [35m0 ms[39m
+[20:32:38] Finished [32mcompilation[39m[34m extension-point-names[39m with 0 errors after [35m792 ms[39m
+[20:32:38] Finished [36mcompile-extension-point-names[39m after [35m793 ms[39m
+[20:32:38] Starting [36mcompile-src[39m ...
+[20:32:41] Starting [32mcompilation[39m...
+[20:32:42] Finished [36mmonaco-typecheck[39m after [35m9385 ms[39m
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/solanaExplorer/browser/solanaExplorer.contribution.ts(43,23): Argument of type 'IConfigurationService' is not assignable to parameter of type 'string'.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(10,10): Module '"../../../services/workingCopy/common/workingCopyService.js"' declares 'IWorkingCopy' locally, but it is not exported.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(12,1): 'isEqual' is declared but its value is never read.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(12,10): Module '"../../../../base/common/uri.js"' has no exported member 'isEqual'.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(15,26): 'MarkerSeverity' is declared but its value is never read.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(16,10): Module '"./aresAuditor.contribution.js"' has no exported member 'IAresFinding'.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(31,36): Property 'markerService' is declared but its value is never read.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(212,9): 'medium' is declared but its value is never read.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/platform/agentHost/node/agentPluginManager.ts(113,68): No overload matches this call.
+  Overload 1 of 2, '(resource: URI, options: IResolveMetadataFileOptions): Promise<IFileStatWithMetadata>', gave the following error.
+    Type 'string' is not assignable to type 'URI'.
+  Overload 2 of 2, '(resource: URI, options?: IResolveFileOptions | undefined): Promise<IFileStat>', gave the following error.
+    Type 'string' is not assignable to type 'URI'.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/platform/agentHost/node/agentPluginManager.ts(118,54): Argument of type 'IFileStatWithMetadata' is not assignable to parameter of type 'URI'.
+  Type 'IFileStatWithMetadata' is missing the following properties from type 'URI': scheme, authority, path, query, and 4 more.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/platform/agentHost/node/agentPluginManager.ts(120,49): Property 'path' does not exist on type 'IFileStatWithMetadata'.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(6,54): Cannot find module '../../../../platform/instantiation/common/extensions.js' or its corresponding type declarations.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(7,29): Cannot find module '../../../../platform/log/common/log.js' or its corresponding type declarations.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(8,33): Cannot find module '../../../../platform/instantiation/common/instantiation.js' or its corresponding type declarations.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(9,1): 'INotificationService' is declared but its value is never read.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(9,38): Cannot find module '../../../../platform/notification/common/notification.js' or its corresponding type declarations.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(10,1): 'IConfigurationService' is declared but its value is never read.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(10,39): Cannot find module '../../../../platform/configuration/common/configuration.js' or its corresponding type declarations.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(11,1): 'IWorkingCopyService' is declared but its value is never read.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(11,37): Cannot find module '../../../services/workingCopy/common/workingCopyService.js' or its corresponding type declarations.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(12,1): 'ILifecycleService' is declared but its value is never read.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(12,35): Cannot find module '../../../services/lifecycle/common/lifecycle.js' or its corresponding type declarations.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(13,1): 'IFileService' is declared but its value is never read.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(13,30): Cannot find module '../../../../platform/files/common/files.js' or its corresponding type declarations.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(14,1): 'IMarkerService' is declared but its value is never read.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(14,32): Cannot find module '../../../../platform/markers/common/markers.js' or its corresponding type declarations.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(15,1): 'AresAuditorScanner' is declared but its value is never read.
+[20:33:27] Finished [32mcompilation[39m with 27 errors after [35m45306 ms[39m
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/solanaExplorer/browser/solanaExplorer.contribution.ts(43,23): Argument of type 'IConfigurationService' is not assignable to parameter of type 'string'.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(10,10): Module '"../../../services/workingCopy/common/workingCopyService.js"' declares 'IWorkingCopy' locally, but it is not exported.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(12,1): 'isEqual' is declared but its value is never read.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(12,10): Module '"../../../../base/common/uri.js"' has no exported member 'isEqual'.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(15,26): 'MarkerSeverity' is declared but its value is never read.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(16,10): Module '"./aresAuditor.contribution.js"' has no exported member 'IAresFinding'.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(31,36): Property 'markerService' is declared but its value is never read.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(212,9): 'medium' is declared but its value is never read.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/platform/agentHost/node/agentPluginManager.ts(113,68): No overload matches this call.
+  Overload 1 of 2, '(resource: URI, options: IResolveMetadataFileOptions): Promise<IFileStatWithMetadata>', gave the following error.
+    Type 'string' is not assignable to type 'URI'.
+  Overload 2 of 2, '(resource: URI, options?: IResolveFileOptions | undefined): Promise<IFileStat>', gave the following error.
+    Type 'string' is not assignable to type 'URI'.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/platform/agentHost/node/agentPluginManager.ts(118,54): Argument of type 'IFileStatWithMetadata' is not assignable to parameter of type 'URI'.
+  Type 'IFileStatWithMetadata' is missing the following properties from type 'URI': scheme, authority, path, query, and 4 more.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/platform/agentHost/node/agentPluginManager.ts(120,49): Property 'path' does not exist on type 'IFileStatWithMetadata'.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(6,54): Cannot find module '../../../../platform/instantiation/common/extensions.js' or its corresponding type declarations.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(7,29): Cannot find module '../../../../platform/log/common/log.js' or its corresponding type declarations.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(8,33): Cannot find module '../../../../platform/instantiation/common/instantiation.js' or its corresponding type declarations.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(9,1): 'INotificationService' is declared but its value is never read.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(9,38): Cannot find module '../../../../platform/notification/common/notification.js' or its corresponding type declarations.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(10,1): 'IConfigurationService' is declared but its value is never read.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(10,39): Cannot find module '../../../../platform/configuration/common/configuration.js' or its corresponding type declarations.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(11,1): 'IWorkingCopyService' is declared but its value is never read.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(11,37): Cannot find module '../../../services/workingCopy/common/workingCopyService.js' or its corresponding type declarations.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(12,1): 'ILifecycleService' is declared but its value is never read.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(12,35): Cannot find module '../../../services/lifecycle/common/lifecycle.js' or its corresponding type declarations.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(13,1): 'IFileService' is declared but its value is never read.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(13,30): Cannot find module '../../../../platform/files/common/files.js' or its corresponding type declarations.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(14,1): 'IMarkerService' is declared but its value is never read.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(14,32): Cannot find module '../../../../platform/markers/common/markers.js' or its corresponding type declarations.
+[20:33:27] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(15,1): 'AresAuditorScanner' is declared but its value is never read.
+[20:33:27] Finished [32mcompilation[39m with 27 errors after [35m45307 ms[39m
+[20:33:27] 'compile' errored after 54 s
+[20:33:27] Error: Found 27 errors
+    at Stream.<anonymous> (file:///Users/macbook/daemon-IDE/vscode/build/lib/reporter.ts:125:17)
+    at _end (/Users/macbook/daemon-IDE/vscode/node_modules/through/index.js:65:9)
+    at stream.end (/Users/macbook/daemon-IDE/vscode/node_modules/through/index.js:74:5)
+    at Stream.onend (node:internal/streams/legacy:48:10)
+    at Stream.emit (node:events:520:35)
+    at Stream.emit (node:domain:552:15)
+    at drain (/Users/macbook/daemon-IDE/vscode/node_modules/through/index.js:34:23)
+    at stream.resume (/Users/macbook/daemon-IDE/vscode/node_modules/through/index.js:99:5)
+    at Stream.ondrain (node:internal/streams/legacy:30:14)
+    at Stream.emit (node:events:508:28)

@@ -1,0 +1,417 @@
+npm warn Unknown project config "disturl". This will stop working in the next major version of npm.
+npm warn Unknown project config "target". This will stop working in the next major version of npm.
+npm warn Unknown project config "ms_build_id". This will stop working in the next major version of npm.
+npm warn Unknown project config "runtime". This will stop working in the next major version of npm.
+npm warn Unknown project config "build_from_source". This will stop working in the next major version of npm.
+npm warn Unknown project config "timeout". This will stop working in the next major version of npm.
+
+> sol-ide-dev@1.104.0 compile
+> npm run gulp compile
+
+npm warn Unknown env config "runtime". This will stop working in the next major version of npm.
+npm warn Unknown env config "build-from-source". This will stop working in the next major version of npm.
+npm warn Unknown env config "ms-build-id". This will stop working in the next major version of npm.
+npm warn Unknown env config "target". This will stop working in the next major version of npm.
+npm warn Unknown env config "disturl". This will stop working in the next major version of npm.
+npm warn Unknown env config "timeout". This will stop working in the next major version of npm.
+npm warn Unknown project config "disturl". This will stop working in the next major version of npm.
+npm warn Unknown project config "target". This will stop working in the next major version of npm.
+npm warn Unknown project config "ms_build_id". This will stop working in the next major version of npm.
+npm warn Unknown project config "runtime". This will stop working in the next major version of npm.
+npm warn Unknown project config "build_from_source". This will stop working in the next major version of npm.
+npm warn Unknown project config "timeout". This will stop working in the next major version of npm.
+
+> sol-ide-dev@1.104.0 gulp
+> node --max-old-space-size=8192 ./node_modules/gulp/bin/gulp.js compile
+
+[20:24:23] Using gulpfile ~/daemon-IDE/vscode/gulpfile.mjs
+[20:24:23] Starting 'compile'...
+[20:24:23] Starting [36mmonaco-typecheck[39m ...
+[20:24:23] Starting [36mclean-out[39m ...
+[20:24:23] Starting [36mclean-extension-configuration-editing[39m ...
+[20:24:23] Starting [36mclean-extension-css-language-features-client[39m ...
+[20:24:23] Starting [36mclean-extension-css-language-features-server[39m ...
+[20:24:23] Starting [36mclean-extension-debug-auto-launch[39m ...
+[20:24:23] Starting [36mclean-extension-debug-server-ready[39m ...
+[20:24:23] Starting [36mclean-extension-emmet[39m ...
+[20:24:23] Starting [36mclean-extension-extension-editing[39m ...
+[20:24:23] Starting [36mclean-extension-git[39m ...
+[20:24:23] Starting [36mclean-extension-git-base[39m ...
+[20:24:23] Starting [36mclean-extension-github[39m ...
+[20:24:23] Starting [36mclean-extension-github-authentication[39m ...
+[20:24:23] Starting [36mclean-extension-html-language-features-client[39m ...
+[20:24:23] Starting [36mclean-extension-html-language-features-server[39m ...
+[20:24:23] Starting [36mclean-extension-json-language-features-client[39m ...
+[20:24:23] Starting [36mclean-extension-json-language-features-server[39m ...
+[20:24:23] Starting [36mclean-extension-markdown-language-features[39m ...
+[20:24:23] Starting [36mclean-extension-markdown-math[39m ...
+[20:24:23] Starting [36mclean-extension-media-preview[39m ...
+[20:24:23] Starting [36mclean-extension-merge-conflict[39m ...
+[20:24:23] Starting [36mclean-extension-mermaid-chat-features[39m ...
+[20:24:23] Starting [36mclean-extension-terminal-suggest[39m ...
+[20:24:23] Starting [36mclean-extension-microsoft-authentication[39m ...
+[20:24:23] Starting [36mclean-extension-notebook-renderers[39m ...
+[20:24:23] Starting [36mclean-extension-npm[39m ...
+[20:24:23] Starting [36mclean-extension-references-view[39m ...
+[20:24:23] Starting [36mclean-extension-search-result[39m ...
+[20:24:23] Starting [36mclean-extension-simple-browser[39m ...
+[20:24:23] Starting [36mclean-extension-tunnel-forwarding[39m ...
+[20:24:23] Starting [36mclean-extension-typescript-language-features-web[39m ...
+[20:24:23] Starting [36mclean-extension-typescript-language-features[39m ...
+[20:24:23] Starting [36mclean-extension-vscode-selfhost-test-provider[39m ...
+[20:24:23] Starting [36mclean-extension-vscode-selfhost-import-aid[39m ...
+[20:24:23] Starting [36mclean-extension-vscode-extras[39m ...
+[20:24:23] Starting [36mcompile-extension-media[39m ...
+[20:24:23] Finished [36mclean-extension-debug-auto-launch[39m after [35m57 ms[39m
+[20:24:23] Starting [36mcompile-extension:debug-auto-launch[39m ...
+(node:39791) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[20:24:23] Finished [36mclean-extension-debug-server-ready[39m after [35m66 ms[39m
+[20:24:23] Starting [36mcompile-extension:debug-server-ready[39m ...
+[20:24:23] Finished [36mclean-extension-extension-editing[39m after [35m68 ms[39m
+[20:24:23] Starting [36mcompile-extension:extension-editing[39m ...
+[20:24:23] Finished [36mclean-extension-merge-conflict[39m after [35m71 ms[39m
+[20:24:23] Starting [36mcompile-extension:merge-conflict[39m ...
+[20:24:23] Finished [36mclean-extension-markdown-math[39m after [35m76 ms[39m
+[20:24:23] Starting [36mcompile-extension:markdown-math[39m ...
+[20:24:23] Finished [36mclean-extension-typescript-language-features-web[39m after [35m79 ms[39m
+[20:24:23] Starting [36mcompile-extension:typescript-language-features-web[39m ...
+[20:24:23] Finished [36mclean-extension-simple-browser[39m after [35m81 ms[39m
+[20:24:23] Starting [36mcompile-extension:simple-browser[39m ...
+[20:24:23] Finished [36mclean-extension-vscode-selfhost-import-aid[39m after [35m82 ms[39m
+[20:24:23] Starting [36mcompile-extension:vscode-selfhost-import-aid[39m ...
+[20:24:23] Finished [36mclean-extension-vscode-selfhost-test-provider[39m after [35m84 ms[39m
+[20:24:23] Starting [36mcompile-extension:vscode-selfhost-test-provider[39m ...
+[20:24:23] Finished [36mclean-extension-tunnel-forwarding[39m after [35m88 ms[39m
+[20:24:23] Starting [36mcompile-extension:tunnel-forwarding[39m ...
+[20:24:23] Finished [36mclean-extension-vscode-extras[39m after [35m90 ms[39m
+[20:24:23] Starting [36mcompile-extension:vscode-extras[39m ...
+[20:24:23] Finished [36mclean-extension-css-language-features-server[39m after [35m322 ms[39m
+[20:24:23] Starting [36mcompile-extension:css-language-features-server[39m ...
+[20:24:23] Finished [36mclean-extension-configuration-editing[39m after [35m326 ms[39m
+[20:24:23] Starting [36mcompile-extension:configuration-editing[39m ...
+[20:24:23] Finished [36mclean-extension-css-language-features-client[39m after [35m329 ms[39m
+[20:24:23] Starting [36mcompile-extension:css-language-features-client[39m ...
+[20:24:23] Finished [36mclean-extension-git-base[39m after [35m347 ms[39m
+[20:24:23] Starting [36mcompile-extension:git-base[39m ...
+[20:24:23] Finished [36mclean-extension-html-language-features-client[39m after [35m364 ms[39m
+[20:24:23] Starting [36mcompile-extension:html-language-features-client[39m ...
+[20:24:23] Finished [36mclean-extension-github[39m after [35m375 ms[39m
+[20:24:23] Starting [36mcompile-extension:github[39m ...
+[20:24:23] Finished [36mclean-extension-json-language-features-server[39m after [35m378 ms[39m
+[20:24:23] Starting [36mcompile-extension:json-language-features-server[39m ...
+[20:24:23] Finished [36mclean-extension-mermaid-chat-features[39m after [35m387 ms[39m
+[20:24:23] Starting [36mcompile-extension:mermaid-chat-features[39m ...
+[20:24:23] Finished [36mclean-extension-git[39m after [35m389 ms[39m
+[20:24:23] Starting [36mcompile-extension:git[39m ...
+[20:24:23] Finished [36mclean-extension-notebook-renderers[39m after [35m402 ms[39m
+[20:24:23] Starting [36mcompile-extension:notebook-renderers[39m ...
+[20:24:23] Finished [36mclean-extension-npm[39m after [35m420 ms[39m
+[20:24:23] Starting [36mcompile-extension:npm[39m ...
+[20:24:23] Finished [36mclean-extension-search-result[39m after [35m494 ms[39m
+[20:24:23] Starting [36mcompile-extension:search-result[39m ...
+[20:24:23] Finished [36mclean-extension-references-view[39m after [35m536 ms[39m
+[20:24:23] Starting [36mcompile-extension:references-view[39m ...
+[20:24:23] Finished [36mclean-extension-json-language-features-client[39m after [35m543 ms[39m
+[20:24:23] Starting [36mcompile-extension:json-language-features-client[39m ...
+[20:24:23] Finished [36mclean-extension-emmet[39m after [35m570 ms[39m
+[20:24:23] Starting [36mcompile-extension:emmet[39m ...
+[20:24:23] Finished [36mclean-extension-media-preview[39m after [35m596 ms[39m
+[20:24:23] Starting [36mcompile-extension:media-preview[39m ...
+[20:24:23] Finished [32mesbuilding extension media[39m /Users/macbook/daemon-IDE/vscode/extensions/markdown-language-features/esbuild.notebook.mts with 0 errors.
+[20:24:23] Finished [32mesbuilding extension media[39m /Users/macbook/daemon-IDE/vscode/extensions/simple-browser/esbuild.webview.mts with 0 errors.
+[20:24:23] Finished [32mesbuilding extension media[39m /Users/macbook/daemon-IDE/vscode/extensions/notebook-renderers/esbuild.notebook.mts with 0 errors.
+[20:24:23] Finished [32mesbuilding extension media[39m /Users/macbook/daemon-IDE/vscode/extensions/markdown-language-features/esbuild.webview.mts with 0 errors.
+[20:24:24] Finished [32mesbuilding extension media[39m /Users/macbook/daemon-IDE/vscode/extensions/markdown-math/esbuild.notebook.mts with 0 errors.
+[20:24:24] Finished [36mclean-extension-github-authentication[39m after [35m1265 ms[39m
+[20:24:24] Starting [36mcompile-extension:github-authentication[39m ...
+[20:24:24] Finished [36mclean-extension-microsoft-authentication[39m after [35m1282 ms[39m
+[20:24:24] Starting [36mcompile-extension:microsoft-authentication[39m ...
+[20:24:24] Finished [36mclean-extension-markdown-language-features[39m after [35m1311 ms[39m
+[20:24:24] Starting [36mcompile-extension:markdown-language-features[39m ...
+[20:24:24] Finished [36mclean-extension-typescript-language-features[39m after [35m1469 ms[39m
+[20:24:24] Starting [36mcompile-extension:typescript-language-features[39m ...
+[20:24:25] Finished [36mcompile-extension:markdown-math[39m after [35m2240 ms[39m
+[20:24:25] Finished [32mesbuilding extension media[39m /Users/macbook/daemon-IDE/vscode/extensions/mermaid-chat-features/esbuild.webview.mts with 0 errors.
+[20:24:25] Finished [36mcompile-extension-media[39m after [35m2614 ms[39m
+[20:24:25] Finished [36mclean-extension-terminal-suggest[39m after [35m2733 ms[39m
+[20:24:25] Starting [36mcompile-extension:terminal-suggest[39m ...
+[20:24:26] Finished [36mcompile-extension:vscode-selfhost-import-aid[39m after [35m2894 ms[39m
+[20:24:26] Finished [36mcompile-extension:vscode-extras[39m after [35m2888 ms[39m
+[20:24:26] Finished [36mcompile-extension:debug-auto-launch[39m after [35m2931 ms[39m
+[20:24:26] Finished [36mcompile-extension:debug-server-ready[39m after [35m2922 ms[39m
+[20:24:26] Finished [36mcompile-extension:tunnel-forwarding[39m after [35m3217 ms[39m
+[20:24:26] Finished [36mclean-extension-html-language-features-server[39m after [35m3421 ms[39m
+[20:24:26] Starting [36mcompile-extension:html-language-features-server[39m ...
+[20:24:26] Finished [36mcompile-extension:simple-browser[39m after [35m3518 ms[39m
+[20:24:26] Finished [36mcompile-extension:search-result[39m after [35m3127 ms[39m
+[20:24:26] Finished [36mcompile-extension:extension-editing[39m after [35m3557 ms[39m
+[20:24:26] Finished [36mcompile-extension:mermaid-chat-features[39m after [35m3238 ms[39m
+[20:24:26] Finished [36mcompile-extension:html-language-features-client[39m after [35m3266 ms[39m
+[20:24:26] Finished [36mcompile-extension:json-language-features-client[39m after [35m3106 ms[39m
+[20:24:26] Finished [36mclean-out[39m after [35m3650 ms[39m
+[20:24:26] Starting [36mcopy-codicons[39m ...
+[20:24:26] Finished [36mcopy-codicons[39m after [35m2 ms[39m
+[20:24:26] Starting [36mcompile-api-proposal-names[39m ...
+[20:24:26] Starting [32mcompilation[39m[34m api-proposal-names[39m...
+[20:24:26] Finished [36mcompile-extension:css-language-features-client[39m after [35m3334 ms[39m
+[20:24:26] Finished [36mcompile-extension:json-language-features-server[39m after [35m3282 ms[39m
+[20:24:26] Finished [36mcompile-extension:merge-conflict[39m after [35m3594 ms[39m
+[20:24:26] Finished [36mcompile-extension:typescript-language-features-web[39m after [35m3587 ms[39m
+[20:24:26] Finished [36mcompile-extension:git-base[39m after [35m3324 ms[39m
+[20:24:26] Finished [36mcompile-extension:npm[39m after [35m3254 ms[39m
+[20:24:26] Finished [36mcompile-extension:media-preview[39m after [35m3079 ms[39m
+[20:24:26] Finished [36mcompile-extension:references-view[39m after [35m3139 ms[39m
+[20:24:26] Finished [36mcompile-extension:notebook-renderers[39m after [35m3277 ms[39m
+[20:24:26] Finished [36mcompile-extension:css-language-features-server[39m after [35m3367 ms[39m
+[20:24:26] Finished [36mcompile-extension:vscode-selfhost-test-provider[39m after [35m3613 ms[39m
+[20:24:26] Finished [36mcompile-extension:github[39m after [35m3404 ms[39m
+[20:24:26] Finished [36mcompile-extension:github-authentication[39m after [35m2530 ms[39m
+[20:24:26] Finished [36mcompile-extension:configuration-editing[39m after [35m3469 ms[39m
+[20:24:26] Finished [36mcompile-extension:microsoft-authentication[39m after [35m2541 ms[39m
+[20:24:26] Finished [36mcompile-extension:emmet[39m after [35m3309 ms[39m
+[20:24:26] Finished [36mcompile-extension:git[39m after [35m3524 ms[39m
+[20:24:26] Finished [36mcompile-extension:markdown-language-features[39m after [35m2609 ms[39m
+[20:24:27] Finished [36mcompile-extension:typescript-language-features[39m after [35m2535 ms[39m
+[20:24:27] Finished [36mcompile-extension:terminal-suggest[39m after [35m1287 ms[39m
+[20:24:27] Finished [36mcompile-extension:html-language-features-server[39m after [35m601 ms[39m
+[20:24:27] Starting [36mcompile-extensions[39m ...
+[20:24:27] Finished [36mcompile-extensions[39m after [35m0 ms[39m
+(node:39791) [DEP0180] DeprecationWarning: fs.Stats constructor is deprecated.
+[20:24:27] Finished [32mcompilation[39m[34m api-proposal-names[39m with 0 errors after [35m377 ms[39m
+[20:24:27] Finished [36mcompile-api-proposal-names[39m after [35m379 ms[39m
+[20:24:27] Starting [36mcompile-extension-point-names[39m ...
+[20:24:27] Starting [32mcompilation[39m[34m extension-point-names[39m...
+[20:24:27] Finished [32mcompilation[39m[34m extension-point-names[39m with 0 errors after [35m732 ms[39m
+[20:24:27] Finished [36mcompile-extension-point-names[39m after [35m733 ms[39m
+[20:24:27] Starting [36mcompile-src[39m ...
+[20:24:31] Starting [32mcompilation[39m...
+[20:24:31] Finished [36mmonaco-typecheck[39m after [35m8877 ms[39m
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/chat/browser/widget/input/chatInputPart.ts(444,9): Type 'ChatModeKind | "custom"' is not assignable to type '"edit" | "agent" | "ask" | "custom" | undefined'.
+  Type 'ChatModeKind.Audit' is not assignable to type '"edit" | "agent" | "ask" | "custom" | undefined'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/sessions/contrib/copilotChatSessions/browser/copilotChatSessionsProvider.ts(1135,9): Type 'ChatModeKind | "custom"' is not assignable to type '"edit" | "agent" | "ask" | "custom" | undefined'.
+  Type 'ChatModeKind.Audit' is not assignable to type '"edit" | "agent" | "ask" | "custom" | undefined'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/solanaExplorer/browser/solanaExplorer.contribution.ts(43,23): Argument of type 'IConfigurationService' is not assignable to parameter of type 'string'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorView.ts(6,1): 'ITelemetryService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorView.ts(8,10): Module '"../../../../platform/storage/common/storageService.js"' has no exported member 'IStorageService'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorView.ts(12,1): 'INotificationService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorView.ts(13,1): 'IProgressService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorView.ts(15,1): 'ILogService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorView.ts(30,1): 'IQuickInputService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorView.ts(51,4): Cannot find name 'IViewDescriptorService'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorView.ts(51,50): Cannot find name 'IViewDescriptorService'. Did you mean 'IViewDescriptor'?
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorView.ts(59,3): Expected 10-11 arguments, but got 9.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorView.ts(163,4): Object literal may only specify known properties, and 'f1label' does not exist in type 'Readonly<IAction2Options>'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorView.ts(166,33): Property 'WEIGHT' does not exist on type 'IKeybindingsRegistry'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorView.ts(173,9): 'viewDescriptorService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorView.ts(173,46): Cannot find name 'IViewDescriptorService'. Did you mean 'viewDescriptorService'?
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorView.ts(174,9): 'layoutService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorView.ts(176,16): 'viewsService' is of type 'unknown'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(10,10): Module '"../../../services/workingCopy/common/workingCopyService.js"' declares 'IWorkingCopy' locally, but it is not exported.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(12,1): 'isEqual' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(12,10): Module '"../../../../base/common/uri.js"' has no exported member 'isEqual'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(14,26): 'MarkerSeverity' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(30,36): Property 'markerService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(72,26): Cannot find name 'URI'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(103,30): Cannot find name 'URI'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(141,27): Cannot find name 'URI'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(149,32): Cannot find name 'URI'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(169,32): Cannot find name 'URI'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(189,38): Cannot find name 'URI'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(208,30): Cannot find name 'URI'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(211,9): 'medium' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(7,1): 'IBulkEditService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(7,34): Cannot find module '../../../browser/editorBrowser.js' or its corresponding type declarations.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(8,1): All imports in import declaration are unused.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(11,1): 'IConfigurationService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(14,1): 'ITextFileService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(15,1): 'IEnvironmentService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(16,1): 'URI' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(17,1): 'IFileService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(19,10): Module '"../../../../platform/commands/common/commands.js"' has no exported member 'registerCommand'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(22,1): 'IViewsService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(22,31): Cannot find module '../../viewsBrowser.js' or its corresponding type declarations.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(23,1): All imports in import declaration are unused.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(23,10): Module '"../../../../platform/quickinput/common/quickInput.js"' has no exported member 'AnyInputActionContribution'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(23,38): '"../../../../platform/quickinput/common/quickInput.js"' has no exported member named 'IQuickInputOptions'. Did you mean 'IInputOptions'?
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(23,58): Module '"../../../../platform/quickinput/common/quickInput.js"' has no exported member 'InputStepAction'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(24,1): All imports in import declaration are unused.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(24,10): Module '"../../../../platform/quickinput/browser/quickInput.js"' has no exported member 'IQuickInputButtonAccessor'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(24,37): Module '"../../../../platform/quickinput/browser/quickInput.js"' has no exported member 'IQuickInputService'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(87,3): Argument of type '(progress: any, token: any) => Promise<IAresScanResult | null>' is not assignable to parameter of type '(progress: IProgress<IProgressStep>) => Promise<IAresScanResult | null>'.
+  Target signature provides too few arguments. Expected 2 or more, but got 1.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(87,10): Parameter 'progress' implicitly has an 'any' type.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(87,20): Parameter 'token' implicitly has an 'any' type.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(189,16): Object literal may only specify known properties, and 'value' does not exist in type 'Error'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(204,4): Object literal may only specify known properties, and 'f1label' does not exist in type 'Readonly<IAction2Options>'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(207,33): Property 'WEIGHT' does not exist on type 'IKeybindingsRegistry'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(224,26): 'quickInputService' is of type 'unknown'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(230,37): Argument of type 'unknown' is not assignable to parameter of type 'INotificationService'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(232,21): Argument of type 'unknown' is not assignable to parameter of type 'INotificationService'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(246,4): Object literal may only specify known properties, and 'f1label' does not exist in type 'Readonly<IAction2Options>'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(252,9): 'progressService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(255,3): 'notificationService' is of type 'unknown'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(271,4): 'logService' is of type 'unknown'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(274,5): 'notificationService' is of type 'unknown'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(279,5): 'notificationService' is of type 'unknown'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(286,4): 'logService' is of type 'unknown'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(287,4): 'notificationService' is of type 'unknown'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(301,4): Object literal may only specify known properties, and 'f1label' does not exist in type 'Readonly<IAction2Options>'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(310,9): 'progressService' is of type 'unknown'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(327,6): 'logService' is of type 'unknown'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(329,6): 'notificationService' is of type 'unknown'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(335,6): 'logService' is of type 'unknown'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(336,6): 'notificationService' is of type 'unknown'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(352,4): Object literal may only specify known properties, and 'f1label' does not exist in type 'Readonly<IAction2Options>'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(363,4): 'notificationService' is of type 'unknown'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(367,4): 'logService' is of type 'unknown'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(369,4): 'notificationService' is of type 'unknown'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(373,4): 'logService' is of type 'unknown'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(387,4): Object literal may only specify known properties, and 'f1label' does not exist in type 'Readonly<IAction2Options>'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(393,3): 'notificationService' is of type 'unknown'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(404,54): Parameter 'accessor' implicitly has an 'any' type.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/platform/agentHost/node/agentPluginManager.ts(113,68): No overload matches this call.
+  Overload 1 of 2, '(resource: URI, options: IResolveMetadataFileOptions): Promise<IFileStatWithMetadata>', gave the following error.
+    Type 'string' is not assignable to type 'URI'.
+  Overload 2 of 2, '(resource: URI, options?: IResolveFileOptions | undefined): Promise<IFileStat>', gave the following error.
+    Type 'string' is not assignable to type 'URI'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/platform/agentHost/node/agentPluginManager.ts(118,54): Argument of type 'IFileStatWithMetadata' is not assignable to parameter of type 'URI'.
+  Type 'IFileStatWithMetadata' is missing the following properties from type 'URI': scheme, authority, path, query, and 4 more.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/platform/agentHost/node/agentPluginManager.ts(120,49): Property 'path' does not exist on type 'IFileStatWithMetadata'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(6,54): Cannot find module '../../../../platform/instantiation/common/extensions.js' or its corresponding type declarations.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(7,29): Cannot find module '../../../../platform/log/common/log.js' or its corresponding type declarations.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(8,33): Cannot find module '../../../../platform/instantiation/common/instantiation.js' or its corresponding type declarations.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(9,1): 'INotificationService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(9,38): Cannot find module '../../../../platform/notification/common/notification.js' or its corresponding type declarations.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(10,1): 'IConfigurationService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(10,39): Cannot find module '../../../../platform/configuration/common/configuration.js' or its corresponding type declarations.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(11,1): 'IWorkingCopyService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(11,37): Cannot find module '../../../services/workingCopy/common/workingCopyService.js' or its corresponding type declarations.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(12,1): 'ILifecycleService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(12,35): Cannot find module '../../../services/lifecycle/common/lifecycle.js' or its corresponding type declarations.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(13,1): 'IFileService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(13,30): Cannot find module '../../../../platform/files/common/files.js' or its corresponding type declarations.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(14,1): 'IMarkerService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(14,32): Cannot find module '../../../../platform/markers/common/markers.js' or its corresponding type declarations.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(15,1): 'AresAuditorScanner' is declared but its value is never read.
+[20:25:15] Finished [32mcompilation[39m with 99 errors after [35m43875 ms[39m
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/chat/browser/widget/input/chatInputPart.ts(444,9): Type 'ChatModeKind | "custom"' is not assignable to type '"edit" | "agent" | "ask" | "custom" | undefined'.
+  Type 'ChatModeKind.Audit' is not assignable to type '"edit" | "agent" | "ask" | "custom" | undefined'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/sessions/contrib/copilotChatSessions/browser/copilotChatSessionsProvider.ts(1135,9): Type 'ChatModeKind | "custom"' is not assignable to type '"edit" | "agent" | "ask" | "custom" | undefined'.
+  Type 'ChatModeKind.Audit' is not assignable to type '"edit" | "agent" | "ask" | "custom" | undefined'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/solanaExplorer/browser/solanaExplorer.contribution.ts(43,23): Argument of type 'IConfigurationService' is not assignable to parameter of type 'string'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorView.ts(6,1): 'ITelemetryService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorView.ts(8,10): Module '"../../../../platform/storage/common/storageService.js"' has no exported member 'IStorageService'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorView.ts(12,1): 'INotificationService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorView.ts(13,1): 'IProgressService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorView.ts(15,1): 'ILogService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorView.ts(30,1): 'IQuickInputService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorView.ts(51,4): Cannot find name 'IViewDescriptorService'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorView.ts(51,50): Cannot find name 'IViewDescriptorService'. Did you mean 'IViewDescriptor'?
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorView.ts(59,3): Expected 10-11 arguments, but got 9.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorView.ts(163,4): Object literal may only specify known properties, and 'f1label' does not exist in type 'Readonly<IAction2Options>'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorView.ts(166,33): Property 'WEIGHT' does not exist on type 'IKeybindingsRegistry'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorView.ts(173,9): 'viewDescriptorService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorView.ts(173,46): Cannot find name 'IViewDescriptorService'. Did you mean 'viewDescriptorService'?
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorView.ts(174,9): 'layoutService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorView.ts(176,16): 'viewsService' is of type 'unknown'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(10,10): Module '"../../../services/workingCopy/common/workingCopyService.js"' declares 'IWorkingCopy' locally, but it is not exported.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(12,1): 'isEqual' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(12,10): Module '"../../../../base/common/uri.js"' has no exported member 'isEqual'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(14,26): 'MarkerSeverity' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(30,36): Property 'markerService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(72,26): Cannot find name 'URI'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(103,30): Cannot find name 'URI'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(141,27): Cannot find name 'URI'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(149,32): Cannot find name 'URI'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(169,32): Cannot find name 'URI'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(189,38): Cannot find name 'URI'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(208,30): Cannot find name 'URI'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditorScanner.ts(211,9): 'medium' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(7,1): 'IBulkEditService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(7,34): Cannot find module '../../../browser/editorBrowser.js' or its corresponding type declarations.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(8,1): All imports in import declaration are unused.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(11,1): 'IConfigurationService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(14,1): 'ITextFileService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(15,1): 'IEnvironmentService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(16,1): 'URI' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(17,1): 'IFileService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(19,10): Module '"../../../../platform/commands/common/commands.js"' has no exported member 'registerCommand'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(22,1): 'IViewsService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(22,31): Cannot find module '../../viewsBrowser.js' or its corresponding type declarations.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(23,1): All imports in import declaration are unused.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(23,10): Module '"../../../../platform/quickinput/common/quickInput.js"' has no exported member 'AnyInputActionContribution'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(23,38): '"../../../../platform/quickinput/common/quickInput.js"' has no exported member named 'IQuickInputOptions'. Did you mean 'IInputOptions'?
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(23,58): Module '"../../../../platform/quickinput/common/quickInput.js"' has no exported member 'InputStepAction'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(24,1): All imports in import declaration are unused.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(24,10): Module '"../../../../platform/quickinput/browser/quickInput.js"' has no exported member 'IQuickInputButtonAccessor'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(24,37): Module '"../../../../platform/quickinput/browser/quickInput.js"' has no exported member 'IQuickInputService'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(87,3): Argument of type '(progress: any, token: any) => Promise<IAresScanResult | null>' is not assignable to parameter of type '(progress: IProgress<IProgressStep>) => Promise<IAresScanResult | null>'.
+  Target signature provides too few arguments. Expected 2 or more, but got 1.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(87,10): Parameter 'progress' implicitly has an 'any' type.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(87,20): Parameter 'token' implicitly has an 'any' type.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(189,16): Object literal may only specify known properties, and 'value' does not exist in type 'Error'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(204,4): Object literal may only specify known properties, and 'f1label' does not exist in type 'Readonly<IAction2Options>'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(207,33): Property 'WEIGHT' does not exist on type 'IKeybindingsRegistry'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(224,26): 'quickInputService' is of type 'unknown'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(230,37): Argument of type 'unknown' is not assignable to parameter of type 'INotificationService'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(232,21): Argument of type 'unknown' is not assignable to parameter of type 'INotificationService'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(246,4): Object literal may only specify known properties, and 'f1label' does not exist in type 'Readonly<IAction2Options>'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(252,9): 'progressService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(255,3): 'notificationService' is of type 'unknown'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(271,4): 'logService' is of type 'unknown'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(274,5): 'notificationService' is of type 'unknown'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(279,5): 'notificationService' is of type 'unknown'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(286,4): 'logService' is of type 'unknown'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(287,4): 'notificationService' is of type 'unknown'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(301,4): Object literal may only specify known properties, and 'f1label' does not exist in type 'Readonly<IAction2Options>'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(310,9): 'progressService' is of type 'unknown'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(327,6): 'logService' is of type 'unknown'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(329,6): 'notificationService' is of type 'unknown'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(335,6): 'logService' is of type 'unknown'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(336,6): 'notificationService' is of type 'unknown'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(352,4): Object literal may only specify known properties, and 'f1label' does not exist in type 'Readonly<IAction2Options>'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(363,4): 'notificationService' is of type 'unknown'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(367,4): 'logService' is of type 'unknown'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(369,4): 'notificationService' is of type 'unknown'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(373,4): 'logService' is of type 'unknown'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(387,4): Object literal may only specify known properties, and 'f1label' does not exist in type 'Readonly<IAction2Options>'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(393,3): 'notificationService' is of type 'unknown'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/browser/aresAuditor.contribution.ts(404,54): Parameter 'accessor' implicitly has an 'any' type.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/platform/agentHost/node/agentPluginManager.ts(113,68): No overload matches this call.
+  Overload 1 of 2, '(resource: URI, options: IResolveMetadataFileOptions): Promise<IFileStatWithMetadata>', gave the following error.
+    Type 'string' is not assignable to type 'URI'.
+  Overload 2 of 2, '(resource: URI, options?: IResolveFileOptions | undefined): Promise<IFileStat>', gave the following error.
+    Type 'string' is not assignable to type 'URI'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/platform/agentHost/node/agentPluginManager.ts(118,54): Argument of type 'IFileStatWithMetadata' is not assignable to parameter of type 'URI'.
+  Type 'IFileStatWithMetadata' is missing the following properties from type 'URI': scheme, authority, path, query, and 4 more.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/platform/agentHost/node/agentPluginManager.ts(120,49): Property 'path' does not exist on type 'IFileStatWithMetadata'.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(6,54): Cannot find module '../../../../platform/instantiation/common/extensions.js' or its corresponding type declarations.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(7,29): Cannot find module '../../../../platform/log/common/log.js' or its corresponding type declarations.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(8,33): Cannot find module '../../../../platform/instantiation/common/instantiation.js' or its corresponding type declarations.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(9,1): 'INotificationService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(9,38): Cannot find module '../../../../platform/notification/common/notification.js' or its corresponding type declarations.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(10,1): 'IConfigurationService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(10,39): Cannot find module '../../../../platform/configuration/common/configuration.js' or its corresponding type declarations.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(11,1): 'IWorkingCopyService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(11,37): Cannot find module '../../../services/workingCopy/common/workingCopyService.js' or its corresponding type declarations.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(12,1): 'ILifecycleService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(12,35): Cannot find module '../../../services/lifecycle/common/lifecycle.js' or its corresponding type declarations.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(13,1): 'IFileService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(13,30): Cannot find module '../../../../platform/files/common/files.js' or its corresponding type declarations.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(14,1): 'IMarkerService' is declared but its value is never read.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(14,32): Cannot find module '../../../../platform/markers/common/markers.js' or its corresponding type declarations.
+[20:25:15] [31mError[39m: /Users/macbook/daemon-IDE/vscode/src/vs/workbench/contrib/aresAuditor/aresAuditorService.ts(15,1): 'AresAuditorScanner' is declared but its value is never read.
+[20:25:15] Finished [32mcompilation[39m with 99 errors after [35m43877 ms[39m
+[20:25:15] 'compile' errored after 52 s
+[20:25:15] Error: Found 99 errors
+    at Stream.<anonymous> (file:///Users/macbook/daemon-IDE/vscode/build/lib/reporter.ts:125:17)
+    at _end (/Users/macbook/daemon-IDE/vscode/node_modules/through/index.js:65:9)
+    at stream.end (/Users/macbook/daemon-IDE/vscode/node_modules/through/index.js:74:5)
+    at Stream.onend (node:internal/streams/legacy:48:10)
+    at Stream.emit (node:events:520:35)
+    at Stream.emit (node:domain:552:15)
+    at drain (/Users/macbook/daemon-IDE/vscode/node_modules/through/index.js:34:23)
+    at stream.resume (/Users/macbook/daemon-IDE/vscode/node_modules/through/index.js:99:5)
+    at Stream.ondrain (node:internal/streams/legacy:30:14)
+    at Stream.emit (node:events:508:28)

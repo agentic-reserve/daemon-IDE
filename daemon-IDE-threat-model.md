@@ -2,7 +2,7 @@
 
 ## Executive summary
 
-SolIDE is a VS Code fork for Solana blockchain development with integrated AI agent capabilities. The highest-risk surfaces are the **agent loop** (LLM + MCP tool execution), **Solana wallet key management**, **terminal command execution**, and **supply chain integrity**. Dominant risk themes: (1) **tool/prompt injection leading to key exfiltration**, (2) **tool output exfiltration without redaction**, (3) **supply-chain compromise** through npm/cargo dependencies (Solana ecosystem has been targeted by Glassworm campaign, @solana/web3.js key exfiltration, and Axios npm supply chain attack), (4) **signing utility integrity** for off-chain transaction signing, and (5) **durable nonce exploitation** (DPRK stole $286M from Drift Protocol using admin key compromise via durable nonces on April 1, 2026).
+ARES IDE is a VS Code fork for Solana blockchain development with integrated AI agent capabilities. The highest-risk surfaces are the **agent loop** (LLM + MCP tool execution), **Solana wallet key management**, **terminal command execution**, and **supply chain integrity**. Dominant risk themes: (1) **tool/prompt injection leading to key exfiltration**, (2) **tool output exfiltration without redaction**, (3) **supply-chain compromise** through npm/cargo dependencies (Solana ecosystem has been targeted by Glassworm campaign, @solana/web3.js key exfiltration, and Axios npm supply chain attack), (4) **signing utility integrity** for off-chain transaction signing, and (5) **durable nonce exploitation** (DPRK stole $286M from Drift Protocol using admin key compromise via durable nonces on April 1, 2026).
 
 ## Scope and assumptions
 
@@ -41,7 +41,7 @@ SolIDE is a VS Code fork for Solana blockchain development with integrated AI ag
 
 | Component | Description | Evidence |
 |-----------|-------------|----------|
-| **SolIDE Chat Provider** | `ILanguageModelChatProvider`, loops over tool calls | `solanaIdeLanguageModel.contribution.ts` |
+| **ARES Chat Provider** | `ILanguageModelChatProvider`, loops over tool calls | `solanaIdeLanguageModel.contribution.ts` |
 | **AI Provider Service** | LLM requests to OpenRouter/OpenAI/Daemon/Ollama | `aiProviderService.ts` |
 | **MCP Tool Router** | MCP tools as function tools; executes after approval | `mcpToolRouter.ts` |
 | **MCP Service** | Server lifecycle (stdio + http) with trust model | `mcpService.ts`, `mcpRegistry.ts` |
@@ -56,22 +56,22 @@ SolIDE is a VS Code fork for Solana blockchain development with integrated AI ag
 
 ### Data flows and trust boundaries
 
-- **User → SolIDE Chat UI → Agent loop**
+- **User → ARES Chat UI → Agent loop**
   - Data: prompts, workspace context, approvals
   - Channel: in-process
   - Guarantees: local user; approval prompt for tool execution
 
-- **SolIDE → LLM Provider**
+- **ARES → LLM Provider**
   - Data: prompts, tool schemas, tool results
   - Channel: outbound HTTPS
   - Guarantees: API key from secret storage
 
-- **LLM Provider → SolIDE (streaming)**
+- **LLM Provider → ARES (streaming)**
   - Data: streamed deltas, tool calls
   - Channel: HTTP response stream
   - Guarantees: JSON parsing; tool args parsed from JSON string
 
-- **SolIDE → MCP Servers (allowlisted only)**
+- **ARES → MCP Servers (allowlisted only)**
   - Data: tool name + args
   - Channel: local stdio or remote HTTP
   - Guarantees: user approval; strict allowlist policy; http servers require explicit trust
@@ -93,7 +93,7 @@ SolIDE is a VS Code fork for Solana blockchain development with integrated AI ag
   - Data: addresses, signatures
   - Channel: app → remote HTTPS (warn on non-allowlisted)
 
-- **SolIDE ↔ x402 Payment (manual)**
+- **ARES ↔ x402 Payment (manual)**
   - Data: PAYMENT-REQUIRED header, PAYMENT-SIGNATURE (user-pasted)
   - Channel: HTTP 402 then user-initiated retry
 
@@ -107,7 +107,7 @@ SolIDE is a VS Code fork for Solana blockchain development with integrated AI ag
 ```mermaid
 flowchart TD
     U["User"]
-    S["SolIDE Chat"]
+    S["ARES Chat"]
     A["AI Provider"]
     L["LLM Provider"]
     M["MCP Servers\n(allowlisted)"]

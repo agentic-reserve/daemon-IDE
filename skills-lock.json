@@ -1,0 +1,230 @@
+{
+  "version": 1,
+  "lastUpdated": "2026-04-03T00:00:00Z",
+  "skills": {
+    "ares-system": {
+      "source": "ares-system/skills",
+      "sourceType": "github",
+      "computedHash": "582d26f08e88cd40377f29e5389ac4af3f2d47f1512f12db0a88bcba7518fa16",
+      "description": "AI-powered security testing platform with 8 integrated tools"
+    },
+    "cyclops": {
+      "source": "ares-system/skills",
+      "sourceType": "github",
+      "computedHash": "76810268054dae3b583d45718a97ff7694df6a9154c1fb2c0fae568b1c276298",
+      "description": "Cryptocurrency wallet risk analysis and blockchain intelligence"
+    },
+    "daemon-intelligence": {
+      "source": "ares-system/skills",
+      "sourceType": "github",
+      "computedHash": "665a9da6c13112d4475f557fc600a52b7a7cea686c38b60c72b2a3ebf6b816ed",
+      "description": "AI agent backend with 300+ LLMs via OpenRouter"
+    },
+    "obscura-privacy": {
+      "source": "ares-system/skills",
+      "sourceType": "github",
+      "computedHash": "feb3ad819e4843f09c7ff71ceee25526cd6914b60cdd5e9390e4f636b72d29db",
+      "description": "Post-quantum secure privacy for Solana"
+    },
+    "ares-agentic-auditor": {
+      "source": "ares-system/skills/ares-agentic-auditor",
+      "sourceType": "github",
+      "computedHash": "placeholder",
+      "description": "Always-on security auditor for ARES IDE development",
+      "capabilities": [
+        "semgrep",
+        "trident",
+        "checked-math",
+        "fuzzy-ai",
+        "whistleblower",
+        "mcp-injection",
+        "hexstrike"
+      ]
+    },
+    "constant-time-analysis": {
+      "source": "trailofbits/skills-curated",
+      "sourceType": "github",
+      "computedHash": "placeholder",
+      "description": "Timing side-channel vulnerability detection"
+    },
+    "constant-time-testing": {
+      "source": "trailofbits/skills-curated",
+      "sourceType": "github",
+      "computedHash": "placeholder",
+      "description": "Constant-time testing for cryptographic code"
+    },
+    "coverage-analysis": {
+      "source": "trailofbits/skills-curated",
+      "sourceType": "github",
+      "computedHash": "placeholder",
+      "description": "Coverage-guided fuzzing analysis"
+    },
+    "fuzzing-dictionary": {
+      "source": "trailofbits/skills-curated",
+      "sourceType": "github",
+      "computedHash": "placeholder",
+      "description": "Fuzzing dictionaries for protocols and formats"
+    },
+    "fuzzing-obstacles": {
+      "source": "trailofbits/skills-curated",
+      "sourceType": "github",
+      "computedHash": "placeholder",
+      "description": "Techniques for overcoming fuzzing blockers"
+    },
+    "sarif-parsing": {
+      "source": "trailofbits/skills-curated",
+      "sourceType": "github",
+      "computedHash": "placeholder",
+      "description": "Parse and process SARIF security scan results"
+    },
+    "security-threat-model": {
+      "source": "trailofbits/skills-curated",
+      "sourceType": "github",
+      "computedHash": "placeholder",
+      "description": "Repository-grounded threat modeling"
+    },
+    "trailmark": {
+      "source": "trailofbits/skills-curated",
+      "sourceType": "github",
+      "computedHash": "placeholder",
+      "description": "Multi-language code graph for security analysis"
+    },
+    "trailmark-structural": {
+      "source": "trailofbits/skills-curated",
+      "sourceType": "github",
+      "computedHash": "placeholder",
+      "description": "Full trailmark structural analysis"
+    },
+    "trailmark-summary": {
+      "source": "trailofbits/skills-curated",
+      "sourceType": "github",
+      "computedHash": "placeholder",
+      "description": "Quick trailmark code summary"
+    },
+    "code-maturity-assessor": {
+      "source": "trailofbits/skills-curated",
+      "sourceType": "github",
+      "computedHash": "placeholder",
+      "description": "Trail of Bits 9-category code maturity assessment"
+    },
+    "agentic-actions-auditor": {
+      "source": "trailofbits/skills-curated",
+      "sourceType": "github",
+      "computedHash": "placeholder",
+      "description": "GitHub Actions security for AI agent integrations"
+    },
+    "devcontainer-setup": {
+      "source": "trailofbits/skills-curated",
+      "sourceType": "github",
+      "computedHash": "placeholder",
+      "description": "Devcontainers with AI coding agent support"
+    },
+    "diagramming-code": {
+      "source": "trailofbits/skills-curated",
+      "sourceType": "github",
+      "computedHash": "placeholder",
+      "description": "Mermaid diagrams from Trailmark code graphs"
+    },
+    "ffuf-web-fuzzing": {
+      "source": "trailofbits/skills-curated",
+      "sourceType": "github",
+      "computedHash": "placeholder",
+      "description": "Web fuzzing with ffuf"
+    },
+    "find-skills": {
+      "source": "trailofbits/skills-curated",
+      "sourceType": "github",
+      "computedHash": "placeholder",
+      "description": "Discover and install agent skills"
+    },
+    "ghidra-headless": {
+      "source": "trailofbits/skills-curated",
+      "sourceType": "github",
+      "computedHash": "placeholder",
+      "description": "Ghidra headless binary analysis"
+    },
+    "git-cleanup": {
+      "source": "trailofbits/skills-curated",
+      "sourceType": "github",
+      "computedHash": "placeholder",
+      "description": "Safe git branch cleanup"
+    },
+    "interpreting-culture-index": {
+      "source": "trailofbits/skills-curated",
+      "sourceType": "github",
+      "computedHash": "placeholder",
+      "description": "Culture Index survey interpretation"
+    },
+    "libfuzzer": {
+      "source": "trailofbits/skills-curated",
+      "sourceType": "github",
+      "computedHash": "placeholder",
+      "description": "LLVM coverage-guided fuzzer"
+    },
+    "ossfuzz": {
+      "source": "trailofbits/skills-curated",
+      "sourceType": "github",
+      "computedHash": "placeholder",
+      "description": "OSS-Fuzz continuous fuzzing setup"
+    },
+    "phantom-connect": {
+      "source": "trailofbits/skills-curated",
+      "sourceType": "github",
+      "computedHash": "placeholder",
+      "description": "Phantom wallet integration for Solana"
+    },
+    "phantom-wallet-mcp": {
+      "source": "trailofbits/skills-curated",
+      "sourceType": "github",
+      "computedHash": "placeholder",
+      "description": "Phantom wallet MCP server"
+    },
+    "pinocchio-development": {
+      "source": "trailofbits/skills-curated",
+      "sourceType": "github",
+      "computedHash": "placeholder",
+      "description": "High-performance Solana programs with Pinocchio"
+    },
+    "property-based-testing": {
+      "source": "trailofbits/skills-curated",
+      "sourceType": "github",
+      "computedHash": "placeholder",
+      "description": "Property-based testing across languages"
+    },
+    "yara-rule-authoring": {
+      "source": "trailofbits/skills-curated",
+      "sourceType": "github",
+      "computedHash": "placeholder",
+      "description": "YARA-X malware detection rules"
+    },
+    "zz-code-recon": {
+      "source": "trailofbits/skills-curated",
+      "sourceType": "github",
+      "computedHash": "placeholder",
+      "description": "Deep architectural context for security audits"
+    }
+  },
+  "syncConfig": {
+    "enabled": true,
+    "sources": [
+      {
+        "name": "ares-system",
+        "url": "https://github.com/ares-system/skills",
+        "autoSync": true,
+        "syncInterval": "1h"
+      },
+      {
+        "name": "trailofbits-curated",
+        "url": "https://github.com/trailofbits/skills-curated",
+        "autoSync": true,
+        "syncInterval": "24h"
+      },
+      {
+        "name": "trailofbits-full",
+        "url": "https://github.com/trailofbits/skills",
+        "autoSync": false,
+        "syncInterval": "1w"
+      }
+    ]
+  }
+}

@@ -277,6 +277,13 @@ export const walkthroughs: GettingStartedWalkthroughContent = [
 					media: { type: 'svg', altText: 'Task runner showing build and test', path: 'runTask.svg' }
 				},
 				{
+					id: 'aresSecurityAudit',
+					title: localize('gettingStarted.aresSecurityAudit.title', "Run security audit with ARES"),
+					description: localize('gettingStarted.aresSecurityAudit.description', "Use the ARES Audit mode to scan your Solana programs for vulnerabilities using Semgrep, fuzzing, and AI-powered analysis.\n{0}", Button(localize('gettingStarted.aresSecurityAudit.button', "Open ARES Audit"), 'command:aresAuditor.runAudit')),
+					when: '!isWeb',
+					media: { type: 'svg', altText: 'Security shield for audit', path: 'security.svg' }
+				},
+				{
 					id: 'pickColorTheme',
 					title: localize('gettingStarted.pickColor.title', "Choose your theme"),
 					description: localize('gettingStarted.pickColor.description.interpolated', "The right theme helps you focus on your code, is easy on your eyes, and is simply more fun to use.\n{0}", Button(localize('titleID', "Browse Color Themes"), 'command:workbench.action.selectTheme')),

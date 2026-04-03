@@ -71,20 +71,20 @@ export enum ChatConfiguration {
  * The "kind" of agents for custom agents.
  */
 export enum ChatModeKind {
-	Ask = 'ask',
-	Edit = 'edit',
-	Agent = 'agent'
+    Ask = 'ask',
+    Edit = 'edit',
+    Agent = 'agent'
 }
 
 export function validateChatMode(mode: unknown): ChatModeKind | undefined {
-	switch (mode) {
-		case ChatModeKind.Ask:
-		case ChatModeKind.Edit:
-		case ChatModeKind.Agent:
-			return mode as ChatModeKind;
-		default:
-			return undefined;
-	}
+    switch (mode) {
+        case ChatModeKind.Ask:
+        case ChatModeKind.Edit:
+        case ChatModeKind.Agent:
+            return mode as ChatModeKind;
+        default:
+            return undefined;
+    }
 }
 
 /**

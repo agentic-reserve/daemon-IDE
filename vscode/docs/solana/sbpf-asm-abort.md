@@ -1,6 +1,6 @@
 # sbpf-asm-abort — emergency program stub (reference)
 
-This note summarizes how to build and deploy the upstream **[sbpf-asm-abort](https://github.com/deanmlittle/sbpf-asm-abort)** project and how it fits a Solana **upgradable** program workflow in ARGUS IDE. It is **not** a substitute for reading the upstream README and [sRFC](https://forum.solana.com/t/srfc-35-address-domain-association-specification/3155)-style domain claims; it is operational tooling context only.
+This note summarizes how to build and deploy the upstream **[sbpf-asm-abort](https://github.com/deanmlittle/sbpf-asm-abort)** project and how it fits a Solana **upgradable** program workflow in ARES IDE. It is **not** a substitute for reading the upstream README and [sRFC](https://forum.solana.com/t/srfc-35-address-domain-association-specification/3155)-style domain claims; it is operational tooling context only.
 
 ## What it is
 
@@ -78,7 +78,7 @@ Deploy your **fixed** program **to the same program id** again using the same up
    - Verify: transactions that invoke the program **fail** as expected.  
    - Communicate outage; deploy fixed binary when ready.
 
-4. **ARGUS IDE**  
+4. **ARES IDE**  
    - Use the integrated terminal from the workspace root; run Solana CLI commands **against the correct RPC** (`solana config set --url …`).  
    - Optional: add a **task** in `.vscode/tasks.json` that runs `sbpf build` in a sibling repo path (do not commit secrets or keypair paths).
 
@@ -117,4 +117,4 @@ Store **outside the git repo** (password manager, internal wiki, or encrypted do
 - Who may authorize deploy of the stub vs. the fixed build.
 - Post-incident steps and communications template.
 
-CI for verifier-related changes: `.github/workflows/argus-solana-ci.yml` (Rust unit tests + TS compile check).
+CI for verifier-related changes: `.github/workflows/ares-solana-ci.yml` (Rust unit tests + TS compile check).

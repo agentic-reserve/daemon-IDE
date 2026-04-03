@@ -174,7 +174,7 @@ registerAction2(class extends Action2 {
 		if (!(await fileService.exists(moduleFolder))) {
 			notificationService.error(localize(
 				'solana.ebpf.module.missing',
-				"Missing `Solana-eBPF-for-Ghidra/` folder at `{0}`. Ensure ARGUS IDE is launched from this repository root.",
+				"Missing `Solana-eBPF-for-Ghidra/` folder at `{0}`. Ensure ARES IDE is launched from this repository root.",
 				moduleFolder.fsPath
 			));
 			return;

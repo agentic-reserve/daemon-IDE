@@ -52,6 +52,7 @@ const builtinDefaultIcon = (mode: IChatMode) => {
 		case 'ask': return Codicon.ask;
 		case 'edit': return Codicon.edit;
 		case 'plan': return Codicon.tasklist;
+		case 'audit': return Codicon.shield;
 		default: return undefined;
 	}
 };

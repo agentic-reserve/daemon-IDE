@@ -13,6 +13,9 @@
 		".github/skills/azure-pipelines/azure-pipeline.ts": false
 	},
 	"chat.editing.explainChanges.enabled": true,
+	// --- Solana IDE AI ---
+	"solide.ai.provider": "openrouter",
+	"solide.ai.model": "openai/gpt-5.2",
 	// --- Editor ---
 	"editor.insertSpaces": false,
 	"editor.experimental.asyncTokenization": true,

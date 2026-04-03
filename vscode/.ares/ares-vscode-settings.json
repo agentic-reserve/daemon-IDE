@@ -1,0 +1,60 @@
+{
+  "ares": {
+    "enabled": true,
+    "apiUrl": "https://api.aressystem.dev",
+    "tools": {
+      "semgrep": {
+        "enabled": true,
+        "onSave": true,
+        "languages": ["typescript", "javascript", "rust", "python"]
+      },
+      "trident": {
+        "enabled": true,
+        "onRustChange": true,
+        "duration": 60000
+      },
+      "checkedMath": {
+        "enabled": true,
+        "onRustSave": true
+      },
+      "fuzzyAI": {
+        "enabled": true,
+        "onAiCodeChange": true
+      },
+      "whistleblower": {
+        "enabled": true,
+        "onAgentCodeSave": true
+      },
+      "mcpInjection": {
+        "enabled": true,
+        "onMcpConfigChange": true
+      }
+    },
+    "notifications": {
+      "critical": "error",
+      "high": "warning",
+      "medium": "info",
+      "low": "silent"
+    },
+    "autoScan": {
+      "onFileSave": true,
+      "onCommit": true,
+      "onPR": true
+    }
+  },
+  "ares.skills": {
+    "autoInstall": true,
+    "sources": [
+      {
+        "name": "ares-system",
+        "url": "https://github.com/ares-system/skills",
+        "autoSync": true
+      },
+      {
+        "name": "trailofbits-curated",
+        "url": "https://github.com/trailofbits/skills-curated",
+        "autoSync": true
+      }
+    ]
+  }
+}

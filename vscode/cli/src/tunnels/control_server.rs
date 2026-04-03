@@ -40,7 +40,7 @@ use tokio_util::codec::Decoder;
 
 use std::sync::atomic::{AtomicBool, AtomicU32, AtomicUsize, Ordering};
 use std::sync::Arc;
-use std::time::Instant;
+use std::time::{Duration, Instant};
 use tokio::io::{AsyncRead, AsyncReadExt, AsyncWrite, AsyncWriteExt, BufReader, DuplexStream};
 use tokio::sync::{mpsc, Mutex};
 
@@ -83,6 +83,8 @@ struct HandlerContext {
 	did_update: Arc<AtomicBool>,
 	/// Whether authentication is still required on the socket.
 	auth_state: Arc<std::sync::Mutex<AuthState>>,
+	/// Backoff state for authentication failures.
+	auth_throttle: Arc<std::sync::Mutex<AuthThrottle>>,
 	/// A loopback channel to talk to the socket server task.
 	socket_tx: mpsc::Sender<SocketSignal>,
 	/// Configured launcher paths.
@@ -114,6 +116,12 @@ enum AuthState {
 	PqKemOffered(libcrux_ml_kem::mlkem768::MlKem768PrivateKey),
 	/// Auth is no longer required.
 	Authenticated,
+}
+
+#[derive(Default)]
+struct AuthThrottle {
+	failures: u32,
+	lockout_until: Option<Instant>,
 }
 
 static MESSAGE_ID_COUNTER: AtomicU32 = AtomicU32::new(0);
@@ -347,6 +355,7 @@ fn make_socket_rpc(
 			AuthRequired::VSDA => AuthState::WaitingForChallenge(None),
 			AuthRequired::None => AuthState::Authenticated,
 		})),
+		auth_throttle: Arc::new(std::sync::Mutex::new(AuthThrottle::default())),
 		socket_tx,
 		log: log.clone(),
 		launcher_paths,
@@ -425,24 +434,25 @@ fn make_socket_rpc(
 		handle_get_env()
 	});
 	rpc.register_sync(METHOD_CHALLENGE_ISSUE, |p: ChallengeIssueParams, c| {
-		handle_challenge_issue(p, &c.auth_state)
+		handle_challenge_issue(p, &c.auth_state, &c.auth_throttle)
 	});
 	rpc.register_sync(METHOD_CHALLENGE_VERIFY, |p: ChallengeVerifyParams, c| {
-		handle_challenge_verify(p.response, &c.auth_state)
+		handle_challenge_verify(p.response, &c.auth_state, &c.auth_throttle)
 	});
 	#[cfg(feature = "pq-kem")]
 	rpc.register_sync(METHOD_PQ_KEM_OFFER, |p: PqKemOfferParams, c| {
-		handle_pq_kem_offer(p, &c.auth_state)
+		handle_pq_kem_offer(p, &c.auth_state, &c.auth_throttle)
 	});
 	#[cfg(feature = "pq-kem")]
 	rpc.register_sync(METHOD_PQ_KEM_ACCEPT, |p: PqKemAccept, c| {
-		handle_pq_kem_accept(p, &c.auth_state)
+		handle_pq_kem_accept(p, &c.auth_state, &c.auth_throttle)
 	});
 	rpc.register_async("serve", move |params: ServeParams, c| async move {
 		ensure_auth(&c.auth_state)?;
 		handle_serve(c, params).await
 	});
 	rpc.register_async("update", |p: UpdateParams, c| async move {
+		ensure_auth(&c.auth_state)?;
 		handle_update(&c.http, &c.log, &c.did_update, &p).await
 	});
 	rpc.register_sync("servermsg", |m: ServerMessageParams, c| {
@@ -451,8 +461,12 @@ fn make_socket_rpc(
 		}
 		Ok(EmptyObject {})
 	});
-	rpc.register_sync("prune", |_: EmptyObject, c| handle_prune(&c.launcher_paths));
+	rpc.register_sync("prune", |_: EmptyObject, c| {
+		ensure_auth(&c.auth_state)?;
+		handle_prune(&c.launcher_paths)
+	});
 	rpc.register_async("callserverhttp", |p: CallServerHttpParams, c| async move {
+		ensure_auth(&c.auth_state)?;
 		let code_server = c.code_server.lock().await.clone();
 		handle_call_server_http(code_server, p).await
 	});
@@ -495,6 +509,7 @@ fn make_socket_rpc(
 		},
 	);
 	rpc.register_sync("httpheaders", |p: HttpHeadersParams, c| {
+		ensure_auth(&c.auth_state)?;
 		if let Some(req) = c.http_requests.lock().unwrap().get(&p.req_id) {
 			trace!(c.log, "got {} response for req {}", p.status_code, p.req_id);
 			req.initial_response(p.status_code, p.headers);
@@ -504,6 +519,7 @@ fn make_socket_rpc(
 		Ok(EmptyObject {})
 	});
 	rpc.register_sync("httpbody", move |p: HttpBodyParams, c| {
+		ensure_auth(&c.auth_state)?;
 		let mut reqs = c.http_requests.lock().unwrap();
 		if let Some(req) = reqs.get(&p.req_id) {
 			if !p.segment.is_empty() {
@@ -530,6 +546,38 @@ fn ensure_auth(is_authed: &Arc<std::sync::Mutex<AuthState>>) -> Result<(), AnyEr
 	} else {
 		Err(CodeError::ServerAuthRequired.into())
 	}
+}
+
+const AUTH_BACKOFF_BASE_MS: u64 = 200;
+const AUTH_BACKOFF_MAX_MS: u64 = 5000;
+
+fn ensure_not_rate_limited(
+	throttle: &Arc<std::sync::Mutex<AuthThrottle>>,
+) -> Result<(), AnyError> {
+	let now = Instant::now();
+	let lock = throttle.lock().unwrap();
+	if let Some(until) = lock.lockout_until {
+		if now < until {
+			let retry_ms = (until - now).as_millis() as u64;
+			return Err(CodeError::AuthRateLimited(retry_ms).into());
+		}
+	}
+
+	Ok(())
+}
+
+fn record_auth_failure(throttle: &Arc<std::sync::Mutex<AuthThrottle>>) {
+	let mut lock = throttle.lock().unwrap();
+	lock.failures = lock.failures.saturating_add(1);
+	let exp = lock.failures.saturating_sub(1).min(5);
+	let delay = (AUTH_BACKOFF_BASE_MS * (1u64 << exp)).min(AUTH_BACKOFF_MAX_MS);
+	lock.lockout_until = Some(Instant::now() + Duration::from_millis(delay));
+}
+
+fn clear_auth_failures(throttle: &Arc<std::sync::Mutex<AuthThrottle>>) {
+	let mut lock = throttle.lock().unwrap();
+	lock.failures = 0;
+	lock.lockout_until = None;
 }
 
 #[allow(clippy::too_many_arguments)] // necessary here
@@ -1073,14 +1121,22 @@ fn handle_get_env() -> Result<GetEnvResponse, AnyError> {
 fn handle_challenge_issue(
 	params: ChallengeIssueParams,
 	auth_state: &Arc<std::sync::Mutex<AuthState>>,
+	auth_throttle: &Arc<std::sync::Mutex<AuthThrottle>>,
 ) -> Result<ChallengeIssueResponse, AnyError> {
+	ensure_not_rate_limited(auth_throttle)?;
 	let challenge = create_challenge();
 
 	let mut auth_state = auth_state.lock().unwrap();
 	if let AuthState::WaitingForChallenge(Some(s)) = &*auth_state {
 		match &params.token {
-			Some(t) if s != t => return Err(CodeError::AuthChallengeBadToken.into()),
-			None => return Err(CodeError::AuthChallengeBadToken.into()),
+			Some(t) if s != t => {
+				record_auth_failure(auth_throttle);
+				return Err(CodeError::AuthChallengeBadToken.into());
+			}
+			None => {
+				record_auth_failure(auth_throttle);
+				return Err(CodeError::AuthChallengeBadToken.into());
+			}
 			_ => {}
 		}
 	}
@@ -1092,21 +1148,33 @@ fn handle_challenge_issue(
 fn handle_challenge_verify(
 	response: String,
 	auth_state: &Arc<std::sync::Mutex<AuthState>>,
+	auth_throttle: &Arc<std::sync::Mutex<AuthThrottle>>,
 ) -> Result<EmptyObject, AnyError> {
+	ensure_not_rate_limited(auth_throttle)?;
 	let mut auth_state = auth_state.lock().unwrap();
 
 	match &*auth_state {
 		AuthState::Authenticated => Ok(EmptyObject {}),
-		AuthState::WaitingForChallenge(_) => Err(CodeError::AuthChallengeNotIssued.into()),
+		AuthState::WaitingForChallenge(_) => {
+			record_auth_failure(auth_throttle);
+			Err(CodeError::AuthChallengeNotIssued.into())
+		}
 		AuthState::ChallengeIssued(c) => match verify_challenge(c, &response) {
-			false => Err(CodeError::AuthChallengeNotIssued.into()),
+			false => {
+				record_auth_failure(auth_throttle);
+				Err(CodeError::AuthChallengeNotIssued.into())
+			}
 			true => {
 				*auth_state = AuthState::Authenticated;
+				clear_auth_failures(auth_throttle);
 				Ok(EmptyObject {})
 			}
 		},
 		#[cfg(feature = "pq-kem")]
-		AuthState::PqKemOffered(_) => Err(CodeError::AuthChallengeNotIssued.into()),
+		AuthState::PqKemOffered(_) => {
+			record_auth_failure(auth_throttle);
+			Err(CodeError::AuthChallengeNotIssued.into())
+		}
 	}
 }
 
@@ -1114,17 +1182,25 @@ fn handle_challenge_verify(
 fn handle_pq_kem_offer(
 	params: PqKemOfferParams,
 	auth_state: &Arc<std::sync::Mutex<AuthState>>,
+	auth_throttle: &Arc<std::sync::Mutex<AuthThrottle>>,
 ) -> Result<PqKemOffer, AnyError> {
 	use super::pq_session::pq_session;
 
+	ensure_not_rate_limited(auth_throttle)?;
 	let mut state = auth_state.lock().unwrap();
 	match &*state {
 		AuthState::WaitingForChallenge(Some(expected_token)) => match &params.token {
 			Some(token) if token == expected_token => {}
-			_ => return Err(CodeError::AuthChallengeBadToken.into()),
+			_ => {
+				record_auth_failure(auth_throttle);
+				return Err(CodeError::AuthChallengeBadToken.into());
+			}
 		},
 		AuthState::WaitingForChallenge(None) => {}
-		_ => return Err(CodeError::AuthChallengeNotIssued.into()),
+		_ => {
+			record_auth_failure(auth_throttle);
+			return Err(CodeError::AuthChallengeNotIssued.into());
+		}
 	}
 
 	let (ek_b64, private_key) = pq_session::server_generate_keypair(&mut rand::thread_rng());
@@ -1137,16 +1213,23 @@ fn handle_pq_kem_offer(
 fn handle_pq_kem_accept(
 	params: PqKemAccept,
 	auth_state: &Arc<std::sync::Mutex<AuthState>>,
+	auth_throttle: &Arc<std::sync::Mutex<AuthThrottle>>,
 ) -> Result<PqKemResult, AnyError> {
 	use super::pq_session::pq_session;
 
+	ensure_not_rate_limited(auth_throttle)?;
 	let mut state = auth_state.lock().unwrap();
 	if let AuthState::PqKemOffered(private_key) = &*state {
 		let _session_keys = pq_session::server_decapsulate(private_key, &params.ct)
-			.map_err(|e| wrap(e, "pq-kem decapsulation failed"))?;
+			.map_err(|e| {
+				record_auth_failure(auth_throttle);
+				wrap(e, "pq-kem decapsulation failed")
+			})?;
 		*state = AuthState::Authenticated;
+		clear_auth_failures(auth_throttle);
 		Ok(PqKemResult { ok: true })
 	} else {
+		record_auth_failure(auth_throttle);
 		Err(CodeError::AuthChallengeNotIssued.into())
 	}
 }

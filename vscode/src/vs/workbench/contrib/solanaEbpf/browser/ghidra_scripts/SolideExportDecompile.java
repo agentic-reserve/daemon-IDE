@@ -1,4 +1,4 @@
-// Ghidra script used by SolIDE headless analysis to export decompiler output.
+// Ghidra script used by ARES IDE headless analysis to export decompiler output.
 // Placed under workbench sources so it is available on disk in dev builds.
 
 import java.io.File;

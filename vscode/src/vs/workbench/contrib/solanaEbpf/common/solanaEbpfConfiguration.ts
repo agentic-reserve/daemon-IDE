@@ -27,7 +27,7 @@ Registry.as<IConfigurationRegistry>(ConfigurationExtensions.Configuration).regis
 		[SolanaEbpfSettingId.ProjectDir]: {
 			type: 'string',
 			default: '',
-			markdownDescription: localize('solide.ebpf.projectDir', "Directory where headless Ghidra projects will be stored. If empty, SolIDE will choose a default."),
+			markdownDescription: localize('solide.ebpf.projectDir', "Directory where headless Ghidra projects will be stored. If empty, ARES IDE will choose a default."),
 		},
 		[SolanaEbpfSettingId.TimeoutSeconds]: {
 			type: 'number',

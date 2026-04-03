@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json.schemastore.org/ares-agent-config.json",
+  "name": "ARES IDE Security Auditor",
+  "description": "Always-on security auditor powered by ARES platform",
+  "version": "1.0.0",
+  "api": {
+    "baseUrl": "https://api.aressystem.dev",
+    "timeout": 300000,
+    "retryAttempts": 3
+  },
+  "monitoring": {
+    "enabled": true,
+    "onSave": true,
+    "onCommit": true,
+    "onPush": false,
+    "debounceMs": 2000
+  },
+  "tools": {
+    "semgrep": {
+      "enabled": true,
+      "languages": ["typescript", "javascript", "rust", "python"],
+      "rules": ["security", "correctness", "best-practices"]
+    },
+    "trident": {
+      "enabled": true,
+      "targetPatterns": ["**/*.rs"],
+      "duration": 60000
+    },
+    "checkedMath": {
+      "enabled": true,
+      "targetPatterns": ["**/*.rs"],
+      "checkOverflow": true,
+      "checkUnderflow": true
+    },
+    "fuzzyAI": {
+      "enabled": true,
+      "targetPatterns": ["**/aiProvider/**", "**/mcp/**"],
+      "attackTypes": ["prompt-injection", "jailbreak", "data-exfiltration"]
+    },
+    "whistleblower": {
+      "enabled": true,
+      "targetPatterns": ["**/agent/**", "**/chat/**", "**/prompt*"]
+    },
+    "mcpInjection": {
+      "enabled": true,
+      "targetPatterns": ["**/mcp*.json", "**/.cursor/mcp.json"],
+      "scanTypes": ["tool-injection", "tool-allowlist-bypass", "context-overflow"]
+    },
+    "hexStrike": {
+      "enabled": false,
+      "targetPatterns": ["**/network/**", "**/server/**"]
+    }
+  },
+  "rules": {
+    "blockOnCritical": true,
+    "blockOnHigh": false,
+    "notifyOnMedium": true,
+    "notifyOnLow": false
+  },
+  "notifications": {
+    "showInEditor": true,
+    "showInPanel": true,
+    "sound": false
+  },
+  "skills": {
+    "autoInstall": true,
+    "sources": [
+      "trailofbits/skills-curated",
+      "trailofbits/skills"
+    ]
+  },
+  "exclusions": {
+    "paths": [
+      "**/node_modules/**",
+      "**/dist/**",
+      "**/out/**",
+      "**/*.min.js"
+    ],
+    "fileTypes": [
+      ".json",
+      ".md",
+      ".lock"
+    ]
+  }
+}

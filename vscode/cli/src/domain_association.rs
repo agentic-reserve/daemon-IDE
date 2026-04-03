@@ -5,6 +5,7 @@
 
 use crate::util::errors::{wrap, AnyError};
 use serde::{Deserialize, Serialize};
+use url::Url;
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
@@ -86,6 +87,45 @@ struct DnsAnswer {
 	data: String,
 }
 
+/// Rejects hostnames that could break HTTPS URL construction or inject query/path segments (SSRF-style abuse).
+pub(crate) fn validate_domain_hostname(domain: &str) -> Result<(), AnyError> {
+	let d = domain.trim();
+	if d.is_empty() {
+		return Err(wrap(
+			std::io::Error::new(std::io::ErrorKind::InvalidInput, "domain is empty"),
+			"invalid domain",
+		)
+		.into());
+	}
+	if d.len() > 253 {
+		return Err(wrap(
+			std::io::Error::new(std::io::ErrorKind::InvalidInput, "domain too long"),
+			"invalid domain",
+		)
+		.into());
+	}
+	for ch in d.chars() {
+		if !ch.is_ascii_alphanumeric() && ch != '.' && ch != '-' {
+			return Err(wrap(
+				std::io::Error::new(
+					std::io::ErrorKind::InvalidInput,
+					"domain contains invalid characters",
+				),
+				"invalid domain",
+			)
+			.into());
+		}
+	}
+	if d.contains("..") || d.starts_with('.') || d.ends_with('.') {
+		return Err(wrap(
+			std::io::Error::new(std::io::ErrorKind::InvalidInput, "domain malformed"),
+			"invalid domain",
+		)
+		.into());
+	}
+	Ok(())
+}
+
 /// Rejects strings that are not valid base58-encoded 32-byte Solana public keys.
 pub fn validate_solana_address_input(address: &str) -> Result<(), AnyError> {
 	if solana_address_decodes_to_32_bytes(address) {
@@ -110,6 +150,8 @@ pub async fn verify_domain_association(
 	http: &reqwest::Client,
 	mut input: VerificationInput,
 ) -> Result<VerificationVerdict, AnyError> {
+	input.domain = input.domain.trim().to_string();
+	validate_domain_hostname(&input.domain)?;
 	input.address = input.address.trim().to_string();
 	validate_solana_address_input(&input.address)?;
 	let mut warnings = Vec::new();
@@ -355,7 +397,11 @@ fn parse_bool(v: &str) -> Option<bool> {
 }
 
 async fn fetch_dns_txt(http: &reqwest::Client, domain: &str) -> Result<Vec<String>, AnyError> {
-	let url = format!("https://dns.google/resolve?name={domain}&type=TXT");
+	let mut url = Url::parse("https://dns.google/resolve")
+		.map_err(|e| wrap(e, "invalid DNS resolver URL"))?;
+	url.query_pairs_mut()
+		.append_pair("name", domain)
+		.append_pair("type", "TXT");
 	let response = http
 		.get(url)
 		.send()
@@ -419,6 +465,19 @@ async fn fetch_well_known(http: &reqwest::Client, domain: &str) -> Result<Vec<St
 #[cfg(test)]
 mod tests {
 	use super::*;
+
+	#[test]
+	fn domain_validation_rejects_path_and_query_injection() {
+		assert!(validate_domain_hostname("evil.com/path").is_err());
+		assert!(validate_domain_hostname("a&inject=1").is_err());
+		assert!(validate_domain_hostname("").is_err());
+	}
+
+	#[test]
+	fn domain_validation_accepts_plain_fqdn() {
+		assert!(validate_domain_hostname("example.com").is_ok());
+		assert!(validate_domain_hostname("sub.example.com").is_ok());
+	}
 
 	#[test]
 	fn strict_parser_supports_program_tag() {

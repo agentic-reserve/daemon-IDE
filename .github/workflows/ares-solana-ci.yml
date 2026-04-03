@@ -1,5 +1,5 @@
 # Focused checks for Solana-related IDE + CLI changes (sRFC-35 verifier, etc.).
-name: ARGUS Solana checks
+name: ARES Solana checks
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
       - 'vscode/src/vs/workbench/contrib/solanaExplorer/**'
       - 'vscode/package.json'
       - 'vscode/package-lock.json'
-      - '.github/workflows/argus-solana-ci.yml'
+      - '.github/workflows/ares-solana-ci.yml'
   pull_request:
     paths:
       - 'vscode/cli/**'
@@ -18,7 +18,7 @@ on:
       - 'vscode/src/vs/workbench/contrib/solanaExplorer/**'
       - 'vscode/package.json'
       - 'vscode/package-lock.json'
-      - '.github/workflows/argus-solana-ci.yml'
+      - '.github/workflows/ares-solana-ci.yml'
 
 jobs:
   rust-domain-association:

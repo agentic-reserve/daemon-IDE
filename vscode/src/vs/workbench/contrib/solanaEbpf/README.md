@@ -1,6 +1,6 @@
 # Solana eBPF Decompiler Setup
 
-This workspace ships Solana eBPF decompile commands in ARGUS IDE.
+This workspace ships Solana eBPF decompile commands in ARES IDE.
 
 ## Prerequisites
 
@@ -19,7 +19,7 @@ This workspace ships Solana eBPF decompile commands in ARGUS IDE.
 
 1. Run `Solana: Decompile eBPF Program (.so)`.
 2. Provide an absolute path to your `.so` binary.
-3. ARGUS IDE runs headless import and analysis, then writes output to `decompile.c`.
+3. ARES IDE runs headless import and analysis, then writes output to `decompile.c`.
 4. Use `Solana: Open eBPF Decompiler Output Folder` to revisit the latest output.
 
 ## Troubleshooting
@@ -29,7 +29,7 @@ This workspace ships Solana eBPF decompile commands in ARGUS IDE.
 - **"Invalid Ghidra install dir"**
   - Ensure `<ghidraInstallDir>/support/analyzeHeadless` exists and points to your Ghidra root.
 - **"Missing Solana-eBPF-for-Ghidra folder"**
-  - Launch ARGUS IDE from this repository root so the sibling module path resolves.
+  - Launch ARES IDE from this repository root so the sibling module path resolves.
 
 ## See also
 
