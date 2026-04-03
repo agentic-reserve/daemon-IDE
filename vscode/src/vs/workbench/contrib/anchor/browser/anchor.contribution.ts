@@ -35,6 +35,14 @@ Registry.as<IViewsRegistry>(ViewExtensions.ViewsRegistry).registerViews([{
 	containerIcon: anchorViewIcon,
 }], VIEW_CONTAINER);
 
+function sanitizeShellArg(value: string): string {
+	return value.replace(/'/g, "'\\''");
+}
+
+function escapeShellArg(value: string): string {
+	return `'${sanitizeShellArg(value)}'`;
+}
+
 async function runAnchorTerminalCommand(commandService: ICommandService, value: string): Promise<void> {
 	await commandService.executeCommand('workbench.action.terminal.focus');
 	await commandService.executeCommand('workbench.action.terminal.sendSequence', { text: `${value}\r` });
@@ -148,8 +156,8 @@ registerAction2(class extends Action2 {
 		const projectName = await pickUniqueFolderName(fileService, baseFolder, desired);
 		const projectFolder = URI.joinPath(baseFolder, projectName);
 
-		await runAnchorTerminalCommand(commandService, `cd "${baseFolder.fsPath}"`);
-		await runAnchorTerminalCommand(commandService, `anchor init "${projectName}"`);
+		await runAnchorTerminalCommand(commandService, `cd ${escapeShellArg(baseFolder.fsPath)}`);
+		await runAnchorTerminalCommand(commandService, `anchor init ${escapeShellArg(projectName)}`);
 
 		notificationService.notify({
 			severity: Severity.Info,

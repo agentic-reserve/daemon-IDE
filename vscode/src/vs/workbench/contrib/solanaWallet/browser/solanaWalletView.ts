@@ -56,6 +56,13 @@ export class SolanaWalletView extends ViewPane {
 		const intro = dom.append(root, dom.$('p.solide-view__intro'));
 		intro.textContent = localize('solana.wallet.view.intro', "Manage keypairs, copy addresses, and request devnet/localnet airdrops.");
 
+		const securityWarning = dom.append(root, dom.$('div.solide-view__security-warning'));
+		securityWarning.innerHTML = localize('solana.wallet.view.securityWarning', `
+			<strong>⚠️ Security Warning (April 2026):</strong> DPRK-linked actors have stolen $286M+ using
+			admin key compromises and durable nonces. Protect your keys: never share them, use hardware wallets
+			for production, and verify all transaction details before signing.
+		`);
+
 		this._renderButton(root, localize('solana.wallet.generate', "Generate keypair"), SolanaWalletCommandId.Generate);
 		this._renderButton(root, localize('solana.wallet.import', "Import keypair"), SolanaWalletCommandId.Import);
 		this._renderButton(root, localize('solana.wallet.copyAddress', "Copy active address"), SolanaWalletCommandId.CopyAddress);

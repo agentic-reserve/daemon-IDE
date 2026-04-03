@@ -66,6 +66,14 @@ function saveWallets(storageService: IStorageService, wallets: IStoredWallet[]):
 	storageService.store(WALLET_LIST_STORAGE_KEY, JSON.stringify(wallets), StorageScope.APPLICATION, StorageTarget.USER);
 }
 
+function sanitizeShellArg(value: string): string {
+	return value.replace(/'/g, "'\\''");
+}
+
+function escapeShellArg(value: string): string {
+	return `'${sanitizeShellArg(value)}'`;
+}
+
 async function runTerminalCommand(commandService: ICommandService, value: string): Promise<void> {
 	await commandService.executeCommand('workbench.action.terminal.focus');
 	await commandService.executeCommand('workbench.action.terminal.sendSequence', { text: `${value}\r` });
@@ -107,7 +115,7 @@ registerAction2(class extends Action2 {
 		}
 
 		const keypairFile = URI.joinPath(environmentService.tmpDir, `solide-keypair-${Date.now()}.json`);
-		await runTerminalCommand(commandService, `solana-keygen new --no-bip39-passphrase --force -o "${keypairFile.fsPath}" --silent`);
+		await runTerminalCommand(commandService, `solana-keygen new --no-bip39-passphrase --force -o ${escapeShellArg(keypairFile.fsPath)} --silent`);
 
 		const bytes = await waitForKeypairFile(fileService, keypairFile);
 		if (!bytes) {
@@ -138,7 +146,16 @@ registerAction2(class extends Action2 {
 		saveWallets(storageService, wallets);
 		await secretStorageService.set(`solide.wallet.${alias}`, secretKey);
 		await configurationService.updateValue(SolanaSettingId.WalletActiveKeypair, alias, ConfigurationTarget.USER);
-		notificationService.notify({ severity: Severity.Info, message: localize('solana.wallet.generated', "Generated keypair '{0}'", alias), source: 'Solana Wallet' });
+		notificationService.notify({
+			severity: Severity.Info,
+			message: localize('solana.wallet.generated', "Generated keypair '{0}'", alias),
+			source: 'Solana Wallet'
+		});
+		notificationService.notify({
+			severity: Severity.Warning,
+			message: localize('solana.wallet.generatedSecurity', "SECURITY: Your secret key is stored securely. Never share it or paste it into chat."),
+			source: 'Solana Wallet'
+		});
 	}
 });
 
@@ -177,7 +194,16 @@ registerAction2(class extends Action2 {
 		saveWallets(storageService, wallets);
 		await secretStorageService.set(`solide.wallet.${alias}`, secretKey);
 		await configurationService.updateValue(SolanaSettingId.WalletActiveKeypair, alias, ConfigurationTarget.USER);
-		notificationService.notify({ severity: Severity.Info, message: localize('solana.wallet.imported', "Imported keypair '{0}'", alias), source: 'Solana Wallet' });
+		notificationService.notify({
+			severity: Severity.Info,
+			message: localize('solana.wallet.imported', "Imported keypair '{0}'", alias),
+			source: 'Solana Wallet'
+		});
+		notificationService.notify({
+			severity: Severity.Warning,
+			message: localize('solana.wallet.importedSecurity', "SECURITY: Imported secret key is stored securely. NEVER paste your secret key into chat or share it."),
+			source: 'Solana Wallet'
+		});
 	}
 });
 
@@ -203,7 +229,11 @@ registerAction2(class extends Action2 {
 			return;
 		}
 		await clipboardService.writeText(wallet.publicKey);
-		notificationService.notify({ severity: Severity.Info, message: localize('solana.wallet.copied', "Copied active wallet address for '{0}'", activeAlias), source: 'Solana Wallet' });
+		notificationService.notify({
+			severity: Severity.Warning,
+			message: localize('solana.wallet.copiedWarning', "Copied wallet address. SECURITY WARNING: Never paste your secret key into chat or share it with anyone."),
+			source: 'Solana Wallet'
+		});
 	}
 });
 

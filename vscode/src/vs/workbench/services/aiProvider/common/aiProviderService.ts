@@ -20,6 +20,61 @@ import { IMcpToolRouter, McpToolRouter } from './mcpToolRouter.js';
 
 type OpenAiRole = 'system' | 'user' | 'assistant' | 'tool';
 
+const SECRET_PATTERNS = [
+	/ak-[a-zA-Z0-9]{20,}/i,
+	/sk-[a-zA-Z0-9]{20,}/i,
+	/0x[a-fA-F0-9]{40,}/,
+	/[a-zA-Z0-9+/]{40,}={0,2}/,
+	/eyJ[a-zA-Z0-9_-]+\.eyJ[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+/,
+	/solana_[a-zA-Z0-9]{40,}/i,
+];
+
+const MAX_OUTPUT_LENGTH = 10000;
+
+function containsPotentialSecret(text: string): boolean {
+	return SECRET_PATTERNS.some(pattern => pattern.test(text));
+}
+
+function redactSecrets(text: string, redactionLabel = '[REDACTED]'): string {
+	let result = text;
+	for (const pattern of SECRET_PATTERNS) {
+		result = result.replace(pattern, redactionLabel);
+	}
+	return result;
+}
+
+function redactToolOutput(output: unknown): { redacted: unknown; hadSecrets: boolean } {
+	if (typeof output === 'string') {
+		const hadSecrets = containsPotentialSecret(output);
+		const redacted = hadSecrets ? redactSecrets(output) : output;
+		const truncated = redacted.length > MAX_OUTPUT_LENGTH ? redacted.slice(0, MAX_OUTPUT_LENGTH) + '...[truncated]' : redacted;
+		return { redacted: truncated, hadSecrets };
+	}
+
+	if (Array.isArray(output)) {
+		let hadSecrets = false;
+		const redacted = output.map(item => {
+			const result = redactToolOutput(item);
+			if (result.hadSecrets) hadSecrets = true;
+			return result.redacted;
+		});
+		return { redacted, hadSecrets };
+	}
+
+	if (output && typeof output === 'object') {
+		let hadSecrets = false;
+		const redacted: Record<string, unknown> = {};
+		for (const [key, value] of Object.entries(output)) {
+			const result = redactToolOutput(value);
+			if (result.hadSecrets) hadSecrets = true;
+			redacted[key] = result.redacted;
+		}
+		return { redacted, hadSecrets };
+	}
+
+	return { redacted: output, hadSecrets: false };
+}
+
 export class AiProviderService extends Disposable implements IAiProviderService {
 	readonly _serviceBrand: undefined;
 
@@ -132,17 +187,25 @@ export class AiProviderService extends Disposable implements IAiProviderService 
 			const toolResults = message.content.filter(p => p.type === 'tool_result') as Array<{ type: 'tool_result'; toolCallId: string; value: unknown; isError?: boolean }>;
 			if (toolResults.length) {
 				for (const toolResult of toolResults) {
+					const { redacted, hadSecrets } = redactToolOutput(toolResult.value);
+					if (hadSecrets) {
+						this._logService.warn('[AiProviderService] Tool output contained secrets - redacted before sending to LLM');
+					}
 					result.push({
 						role: 'tool',
 						tool_call_id: toolResult.toolCallId,
-						content: JSON.stringify(toolResult.value),
+						content: JSON.stringify(redacted),
 					});
 				}
 				continue;
 			}
 
 			const role: OpenAiRole = message.role === 1 ? 'user' : message.role === 2 ? 'assistant' : 'system';
-			result.push({ role, content: this._flattenTextParts(message) });
+			const text = this._flattenTextParts(message);
+			if (containsPotentialSecret(text)) {
+				this._logService.warn('[AiProviderService] Message may contain secrets - consider reviewing');
+			}
+			result.push({ role, content: text });
 		}
 
 		return result;

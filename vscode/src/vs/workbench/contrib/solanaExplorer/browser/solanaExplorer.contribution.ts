@@ -14,8 +14,12 @@ import { ICommandService } from '../../../../platform/commands/common/commands.j
 import { IQuickInputService } from '../../../../platform/quickinput/common/quickInput.js';
 import { INotificationService, Severity } from '../../../../platform/notification/common/notification.js';
 import { IConfigurationService } from '../../../../platform/configuration/common/configuration.js';
-import { SolanaSettingId } from '../../solana/common/solanaConfiguration.js';
+import { IInstantiationService } from '../../../../platform/instantiation/common/instantiation.js';
+import { SolanaSettingId, isRpcUrlAllowed, isHttpsRpc } from '../../solana/common/solanaConfiguration.js';
 import { DomainAssociationMode, DomainAssociationRecordType, isValidSolanaAddress, verifyDomainAssociation } from '../../solana/common/domainAssociation.js';
+import { IEditorService } from '../../../services/editor/common/editorService.js';
+import { IUntitledTextEditorService } from '../../../services/untitled/common/untitledTextEditorService.js';
+import { UntitledTextEditorInput } from '../../../services/untitled/common/untitledTextEditorInput.js';
 import { VIEW_CONTAINER } from '../../files/browser/explorerViewlet.js';
 import { SolanaExplorerCommandId, SolanaExplorerView, SOLANA_EXPLORER_VIEW_ID } from './solanaExplorerView.js';
 
@@ -33,8 +37,25 @@ Registry.as<IViewsRegistry>(ViewExtensions.ViewsRegistry).registerViews([{
 	focusCommand: { id: SolanaExplorerCommandId.Focus },
 }], VIEW_CONTAINER);
 
-async function rpcCall(configurationService: IConfigurationService, method: string, params: unknown[]): Promise<unknown> {
+async function rpcCall(configurationService: IConfigurationService, notificationService: INotificationService, method: string, params: unknown[]): Promise<unknown> {
 	const rpcUrl = configurationService.getValue<string>(SolanaSettingId.RpcUrl) || 'https://api.devnet.solana.com';
+
+	if (!isRpcUrlAllowed(configurationService, rpcUrl)) {
+		notificationService.notify({
+			severity: Severity.Warning,
+			message: localize('solana.explorer.rpc.untrusted', "Security Warning: This RPC endpoint ({0}) is not in your allowed list. Configure 'Solana: Allowed RPC Endpoints' to restrict endpoints.", rpcUrl),
+			source: 'Solana Explorer',
+		});
+	}
+
+	if (!isHttpsRpc(rpcUrl)) {
+		notificationService.notify({
+			severity: Severity.Warning,
+			message: localize('solana.explorer.rpc.insecure', "Security Warning: This RPC endpoint ({0}) is not using HTTPS. Your data may be intercepted.", rpcUrl),
+			source: 'Solana Explorer',
+		});
+	}
+
 	const response = await fetch(rpcUrl, {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
@@ -44,6 +65,27 @@ async function rpcCall(configurationService: IConfigurationService, method: stri
 		throw new Error(`RPC request failed (${response.status})`);
 	}
 	return response.json();
+}
+
+function clusterQueryFromRpcUrl(rpcUrl: string): string {
+	const u = rpcUrl.toLowerCase();
+	if (u.includes('mainnet') && !u.includes('devnet')) {
+		return 'mainnet-beta';
+	}
+	if (u.includes('testnet')) {
+		return 'testnet';
+	}
+	return 'devnet';
+}
+
+async function openSolanaResultEditor(accessor: import('../../../../platform/instantiation/common/instantiation.js').ServicesAccessor, data: unknown): Promise<void> {
+	const instantiationService = accessor.get(IInstantiationService);
+	const untitledTextEditorService = accessor.get(IUntitledTextEditorService);
+	const editorService = accessor.get(IEditorService);
+	const text = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
+	const model = untitledTextEditorService.create({ initialValue: text, languageId: 'json' });
+	const input = instantiationService.createInstance(UntitledTextEditorInput, model);
+	await editorService.openEditor(input, { pinned: true });
 }
 
 registerAction2(class extends Action2 {
@@ -59,9 +101,9 @@ registerAction2(class extends Action2 {
 			return;
 		}
 		try {
-			const result = await rpcCall(configurationService, 'getAccountInfo', [address, { encoding: 'base64' }]);
+			const result = await rpcCall(configurationService, notificationService, 'getAccountInfo', [address, { encoding: 'base64' }]);
 			notificationService.notify({ severity: Severity.Info, message: localize('solana.explorer.account.success', "Account lookup completed for {0}", address), source: 'Solana Explorer' });
-			console.debug('[SolanaExplorer] getAccountInfo', result);
+			await openSolanaResultEditor(accessor, result);
 		} catch (error) {
 			notificationService.error(localize('solana.explorer.account.error', "Failed to lookup account: {0}", error instanceof Error ? error.message : String(error)));
 		}
@@ -134,7 +176,7 @@ registerAction2(class extends Action2 {
 				});
 			}
 
-			console.debug('[SolanaExplorer] verifyDomainAssociation', result);
+			await openSolanaResultEditor(accessor, result);
 		} catch (error) {
 			notificationService.error(localize('solana.explorer.verify.error', "Failed to verify domain association: {0}", error instanceof Error ? error.message : String(error)));
 		}
@@ -154,9 +196,9 @@ registerAction2(class extends Action2 {
 			return;
 		}
 		try {
-			const result = await rpcCall(configurationService, 'getTransaction', [signature, { maxSupportedTransactionVersion: 0 }]);
+			const result = await rpcCall(configurationService, notificationService, 'getTransaction', [signature, { maxSupportedTransactionVersion: 0 }]);
 			notificationService.notify({ severity: Severity.Info, message: localize('solana.explorer.tx.success', "Transaction lookup completed for {0}", signature), source: 'Solana Explorer' });
-			console.debug('[SolanaExplorer] getTransaction', result);
+			await openSolanaResultEditor(accessor, result);
 		} catch (error) {
 			notificationService.error(localize('solana.explorer.tx.error', "Failed to lookup transaction: {0}", error instanceof Error ? error.message : String(error)));
 		}
@@ -170,11 +212,14 @@ registerAction2(class extends Action2 {
 	override async run(accessor: import('../../../../platform/instantiation/common/instantiation.js').ServicesAccessor): Promise<void> {
 		const quickInput = accessor.get(IQuickInputService);
 		const commandService = accessor.get(ICommandService);
+		const configurationService = accessor.get(IConfigurationService);
 		const programId = await quickInput.input({ prompt: localize('solana.explorer.program.prompt', "Enter program ID") });
 		if (!programId) {
 			return;
 		}
-		await commandService.executeCommand('simpleBrowser.show', `https://explorer.solana.com/address/${encodeURIComponent(programId)}?cluster=devnet`);
+		const rpcUrl = configurationService.getValue<string>(SolanaSettingId.RpcUrl) || 'https://api.devnet.solana.com';
+		const cluster = clusterQueryFromRpcUrl(rpcUrl);
+		await commandService.executeCommand('simpleBrowser.show', `https://explorer.solana.com/address/${encodeURIComponent(programId)}?cluster=${encodeURIComponent(cluster)}`);
 	}
 });
 
@@ -185,11 +230,14 @@ registerAction2(class extends Action2 {
 	override async run(accessor: import('../../../../platform/instantiation/common/instantiation.js').ServicesAccessor): Promise<void> {
 		const quickInput = accessor.get(IQuickInputService);
 		const commandService = accessor.get(ICommandService);
+		const configurationService = accessor.get(IConfigurationService);
 		const mint = await quickInput.input({ prompt: localize('solana.explorer.token.prompt', "Enter token mint address") });
 		if (!mint) {
 			return;
 		}
-		await commandService.executeCommand('simpleBrowser.show', `https://explorer.solana.com/address/${encodeURIComponent(mint)}?cluster=devnet`);
+		const rpcUrl = configurationService.getValue<string>(SolanaSettingId.RpcUrl) || 'https://api.devnet.solana.com';
+		const cluster = clusterQueryFromRpcUrl(rpcUrl);
+		await commandService.executeCommand('simpleBrowser.show', `https://explorer.solana.com/address/${encodeURIComponent(mint)}?cluster=${encodeURIComponent(cluster)}`);
 	}
 });
 

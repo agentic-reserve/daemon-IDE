@@ -48,6 +48,47 @@ function normalizePathInput(value: string): string {
 	return value.trim().replace(/^"(.*)"$/, '$1');
 }
 
+/**
+ * Paths embedded in double-quoted shell strings must not contain metacharacters that enable injection.
+ */
+function isSafePathForQuotedShell(p: string): boolean {
+	if (!p || p.length > 8192) {
+		return false;
+	}
+	if (/[\x00-\x1f\x7f]/.test(p)) {
+		return false;
+	}
+	for (const ch of '"$`\n\r;&|') {
+		if (p.includes(ch)) {
+			return false;
+		}
+	}
+	return true;
+}
+
+/**
+ * Validates that a path doesn't contain path traversal sequences and is within allowed bounds.
+ */
+function isSafeProjectPath(p: string, allowedPrefix?: string): { safe: boolean; reason?: string } {
+	if (!p) {
+		return { safe: false, reason: 'Empty path' };
+	}
+	const normalized = p.replace(/\\/g, '/');
+
+	if (normalized.includes('..')) {
+		return { safe: false, reason: 'Path traversal sequences (..) are not allowed' };
+	}
+
+	if (allowedPrefix) {
+		const normalizedPrefix = allowedPrefix.replace(/\\/g, '/').replace(/\/+$/, '');
+		if (!normalized.startsWith(normalizedPrefix + '/') && normalized !== normalizedPrefix) {
+			return { safe: false, reason: `Path must be within ${allowedPrefix}` };
+		}
+	}
+
+	return { safe: true };
+}
+
 function defaultProjectRoot(environmentService: INativeEnvironmentService): URI {
 	return URI.joinPath(environmentService.userHome, '.solide', 'ghidra-projects');
 }
@@ -113,6 +154,10 @@ registerAction2(class extends Action2 {
 			}
 			ghidraInstallDir = normalizePathInput(typed);
 			await configurationService.updateValue(SolanaEbpfSettingId.GhidraInstallDir, ghidraInstallDir, ConfigurationTarget.USER);
+		}
+		if (!isSafePathForQuotedShell(ghidraInstallDir)) {
+			notificationService.error(localize('solana.ebpf.path.unsafe', "Path contains characters that cannot be used in a shell command. Remove quotes, spaces, or symbols like ; & | $ `."));
+			return;
 		}
 		if (!(await validateGhidraInstallDir(fileService, ghidraInstallDir))) {
 			notificationService.error(localize(
@@ -189,13 +234,38 @@ registerAction2(class extends Action2 {
 		}
 
 		const binaryPath = normalizePathInput(binaryPathInput);
+		if (!isSafePathForQuotedShell(binaryPath)) {
+			notificationService.error(localize('solana.ebpf.path.unsafe', "Path contains characters that cannot be used in a shell command. Remove quotes, spaces, or symbols like ; & | $ `."));
+			return;
+		}
+		const pathValidation = isSafeProjectPath(binaryPath);
+		if (!pathValidation.safe) {
+			notificationService.error(localize('solana.ebpf.path.traversal', "Security: {0}", pathValidation.reason));
+			return;
+		}
 		if (!(await fileExists(fileService, binaryPath))) {
 			notificationService.error(localize('solana.ebpf.binary.missing', "File not found: {0}", binaryPath));
 			return;
 		}
 
 		const configuredRoot = (configurationService.getValue<string>(SolanaEbpfSettingId.ProjectDir) ?? '').trim();
+		if (configuredRoot) {
+			if (!isSafePathForQuotedShell(configuredRoot)) {
+				notificationService.error(localize('solana.ebpf.path.unsafe', "Path contains characters that cannot be used in a shell command. Remove quotes, spaces, or symbols like ; & | $ `."));
+				return;
+			}
+			const rootValidation = isSafeProjectPath(configuredRoot);
+			if (!rootValidation.safe) {
+				notificationService.error(localize('solana.ebpf.path.traversal', "Security: {0}", rootValidation.reason));
+				return;
+			}
+		}
 		const projectRoot = configuredRoot ? URI.file(configuredRoot) : defaultProjectRoot(environmentService);
+		const projectRootValidation = isSafeProjectPath(projectRoot.fsPath, defaultProjectRoot(environmentService).fsPath);
+		if (!projectRootValidation.safe) {
+			notificationService.error(localize('solana.ebpf.path.traversal', "Security: {0}", projectRootValidation.reason));
+			return;
+		}
 		const projectName = `solide-ebpf-${Date.now()}-${basename(binaryPath).replace(/[^a-zA-Z0-9._-]+/g, '-')}`;
 		const exportRoot = URI.joinPath(projectRoot, `${projectName}-export`);
 		const exportFile = URI.joinPath(exportRoot, 'decompile.c');

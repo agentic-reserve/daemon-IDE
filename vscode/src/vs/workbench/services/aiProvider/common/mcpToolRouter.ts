@@ -15,6 +15,64 @@ import { SolideAiSettingId } from './aiProvider.js';
 
 export const IMcpToolRouter = createDecorator<IMcpToolRouter>('IMcpToolRouter');
 
+export enum ToolRiskLevel {
+	Low = 'low',
+	Medium = 'medium',
+	High = 'high',
+	Critical = 'critical',
+}
+
+const HIGH_RISK_PATTERNS = [
+	/dangerous|exec|run|delete|remove|drop/i,
+	/write|create|update|modify/i,
+	/sudo|admin|root|priv/i,
+	/key|secret|password|credential/i,
+	/inject|patch|hook/i,
+	/file|fs|path/i,
+	/send.*transaction|sign.*transaction/i,
+	/ssh|shell|bash|cmd/i,
+	/download|upload|fetch.*url/i,
+];
+
+const CRITICAL_RISK_PATTERNS = [
+	/transfer.*all|withdraw.*all/i,
+	/delete.*account|remove.*wallet/i,
+	/export.*key|show.*secret/i,
+	/sudo.*exec|run.*as.*root/i,
+	/modify.*permission|chmod.*777/i,
+];
+
+function getToolRiskLevel(toolName: string, description?: string): ToolRiskLevel {
+	const text = `${toolName} ${description || ''}`.toLowerCase();
+
+	for (const pattern of CRITICAL_RISK_PATTERNS) {
+		if (pattern.test(text)) {
+			return ToolRiskLevel.Critical;
+		}
+	}
+
+	for (const pattern of HIGH_RISK_PATTERNS) {
+		if (pattern.test(text)) {
+			return ToolRiskLevel.High;
+		}
+	}
+
+	return ToolRiskLevel.Low;
+}
+
+function getRiskConfirmationMessage(level: ToolRiskLevel, toolName: string): string {
+	switch (level) {
+		case ToolRiskLevel.Critical:
+			return `CRITICAL RISK: "${toolName}" may perform irreversible or high-impact actions. Are you sure?`;
+		case ToolRiskLevel.High:
+			return `High-risk tool: "${toolName}". This tool may modify files, execute commands, or access sensitive data. Proceed?`;
+		case ToolRiskLevel.Medium:
+			return `Medium-risk tool: "${toolName}". This tool performs potentially impactful operations. Continue?`;
+		default:
+			return `Allow tool call: ${toolName}`;
+	}
+}
+
 export interface IOpenAiFunctionTool {
 	readonly type: 'function';
 	readonly function: {
@@ -154,15 +212,41 @@ export class McpToolRouter implements IMcpToolRouter {
 			throw new Error(`Unknown MCP server: ${parsed.serverId}`);
 		}
 
-		const approved = await this._quickInputService.pick([
-			{ id: 'approve', label: 'Approve' },
-			{ id: 'deny', label: 'Deny' },
-		], {
-			placeHolder: `Allow tool call: ${parsed.serverId}.${parsed.toolName}`,
+		const tool = server.tools.get().find(t => t.definition.name === parsed.toolName);
+		if (!tool) {
+			throw new Error(`Unknown tool '${parsed.toolName}' on server '${parsed.serverId}'`);
+		}
+
+		const riskLevel = getToolRiskLevel(parsed.toolName, tool.definition.description);
+		const confirmationMessage = getRiskConfirmationMessage(riskLevel, `${parsed.serverId}.${parsed.toolName}`);
+
+		this._logService.info('[McpToolRouter] Tool execution request', {
+			tool: parsed.toolName,
+			server: parsed.serverId,
+			riskLevel,
+			hasDescription: !!tool.definition.description,
 		});
 
-		if (!approved || approved.id !== 'approve') {
-			throw new Error('Tool call denied by user');
+		if (riskLevel === ToolRiskLevel.Critical) {
+			const confirmed = await this._quickInputService.pick([
+				{ id: 'approve', label: 'Execute (Critical)' },
+				{ id: 'deny', label: 'Cancel' },
+			], {
+				placeHolder: confirmationMessage,
+			});
+			if (!confirmed || confirmed.id !== 'approve') {
+				throw new Error('Critical tool call denied by user');
+			}
+		} else {
+			const approved = await this._quickInputService.pick([
+				{ id: 'approve', label: riskLevel === ToolRiskLevel.High ? 'Approve (High Risk)' : 'Approve' },
+				{ id: 'deny', label: 'Deny' },
+			], {
+				placeHolder: confirmationMessage,
+			});
+			if (!approved || approved.id !== 'approve') {
+				throw new Error('Tool call denied by user');
+			}
 		}
 
 		// Ensure server is started if needed. Use default prompts/trust flow.
@@ -172,13 +256,8 @@ export class McpToolRouter implements IMcpToolRouter {
 			this._logService.error('[McpToolRouter] Failed to start server', error);
 		}
 
-		const tool = server.tools.get().find(t => t.definition.name === parsed.toolName);
-		if (!tool) {
-			throw new Error(`Unknown tool '${parsed.toolName}' on server '${parsed.serverId}'`);
-		}
-
 		const args = (parameters && typeof parameters === 'object') ? (parameters as Record<string, unknown>) : {};
-		this._logService.info('[McpToolRouter] Executing tool', { serverId: parsed.serverId, tool: parsed.toolName });
+		this._logService.info('[McpToolRouter] Executing tool', { serverId: parsed.serverId, tool: parsed.toolName, riskLevel });
 
 		const result: MCP.CallToolResult = await tool.call(args, undefined, token);
 		const json = JSON.stringify(result);

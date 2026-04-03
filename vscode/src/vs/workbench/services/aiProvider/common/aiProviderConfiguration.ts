@@ -46,8 +46,8 @@ Registry.as<IConfigurationRegistry>(ConfigurationExtensions.Configuration).regis
 		[SolideAiSettingId.McpAllowedTools]: {
 			type: 'array',
 			items: { type: 'string' },
-			default: ['*'],
-			markdownDescription: localize('solide.ai.mcp.allowedTools', "List of allowed tool patterns (glob-like) within allowed MCP servers. Examples: `*`, `get_*`, `risk_*`. This is an allowlist."),
+			default: [],
+			markdownDescription: localize('solide.ai.mcp.allowedTools', "List of allowed tool patterns (glob-like) within allowed MCP servers. Default is empty (deny all). Examples: `*` (allow all), `get_*` (allow tools starting with get_), `*_read` (allow tools ending with _read). **WARNING**: Using `*` exposes all tools from allowed servers to the AI."),
 		},
 	}
 });

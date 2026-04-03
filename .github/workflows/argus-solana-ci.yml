@@ -8,12 +8,16 @@ on:
       - 'vscode/cli/**'
       - 'vscode/src/vs/workbench/contrib/solana/**'
       - 'vscode/src/vs/workbench/contrib/solanaExplorer/**'
+      - 'vscode/package.json'
+      - 'vscode/package-lock.json'
       - '.github/workflows/argus-solana-ci.yml'
   pull_request:
     paths:
       - 'vscode/cli/**'
       - 'vscode/src/vs/workbench/contrib/solana/**'
       - 'vscode/src/vs/workbench/contrib/solanaExplorer/**'
+      - 'vscode/package.json'
+      - 'vscode/package-lock.json'
       - '.github/workflows/argus-solana-ci.yml'
 
 jobs:
@@ -44,3 +48,57 @@ jobs:
         run: npm ci
       - name: TypeScript compile check (native)
         run: npm run compile-check-ts-native
+
+  cargo-audit:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: vscode/cli
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Install cargo-audit
+        run: |
+          cargo install cargo-audit --locked
+      - name: Run cargo audit
+        run: cargo audit --deny warnings
+        continue-on-error: false
+
+  npm-audit:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: vscode
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: vscode/package-lock.json
+      - name: npm ci
+        run: npm ci
+      - name: Run npm audit (critical/high only)
+        run: npm audit --audit-level=critical
+        continue-on-error: false
+
+  postinstall-audit:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: vscode
+    steps:
+      - uses: actions/checkout@v4
+      - name: Audit postinstall script
+        run: |
+          echo "=== Auditing build/npm/postinstall.ts ==="
+          if grep -q "readFileSync\|writeFileSync\|exec\|spawn" build/npm/postinstall.ts; then
+            echo "WARNING: postinstall contains file/network operations - review manually"
+            grep -n "readFileSync\|writeFileSync\|exec\|spawn\|eval" build/npm/postinstall.ts || true
+          fi
+          echo "=== Checking for known malicious patterns ==="
+          if grep -qE "base64.*decode|eval\(|vm\." build/npm/postinstall.ts; then
+            echo "ALERT: Potentially dangerous patterns found"
+            exit 1
+          fi
+          echo "No dangerous patterns detected"

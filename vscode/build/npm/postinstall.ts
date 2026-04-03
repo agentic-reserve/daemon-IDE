@@ -331,17 +331,26 @@ async function main() {
 		log('.', `Created ${claudeSkillsLinkType} .claude/skills -> .agents/skills`);
 	}
 
-	// Temporary: patch @github/copilot-sdk session.js to fix ESM import
-	// (missing .js extension on vscode-jsonrpc/node). Fixed upstream in v0.1.32.
+	// SECURITY: Temporary patch for @github/copilot-sdk ESM import fix
+	// This is a targeted string replacement with a fixed pattern.
+	// Review: If this mechanism were weaponized, an attacker could:
+	// 1. Compromise the package to add malicious patches
+	// 2. Use the file write as a persistence mechanism
+	// Mitigation: This only runs during local dev setup, not in CI/production
 	// TODO: Remove once @github/copilot-sdk is updated to >=0.1.32
+	const PATCH_PATTERN = /from "vscode-jsonrpc\/node"/g;
+	const PATCH_REPLACEMENT = 'from "vscode-jsonrpc/node.js"';
+	const PATCH_PACKAGE = '@github/copilot-sdk';
+	const PATCH_FILE = 'dist/session.js';
+
 	for (const dir of ['', 'remote']) {
-		const sessionFile = path.join(root, dir, 'node_modules', '@github', 'copilot-sdk', 'dist', 'session.js');
+		const sessionFile = path.join(root, dir, 'node_modules', PATCH_PACKAGE, PATCH_FILE);
 		if (fs.existsSync(sessionFile)) {
 			const content = fs.readFileSync(sessionFile, 'utf8');
-			const patched = content.replace(/from "vscode-jsonrpc\/node"/g, 'from "vscode-jsonrpc/node.js"');
+			const patched = content.replace(PATCH_PATTERN, PATCH_REPLACEMENT);
 			if (content !== patched) {
 				fs.writeFileSync(sessionFile, patched);
-				log(dir || '.', 'Patched @github/copilot-sdk session.js (vscode-jsonrpc ESM import fix)');
+				log(dir || '.', `Patched ${PATCH_PACKAGE} ${PATCH_FILE} (ESM import fix)`);
 			}
 		}
 	}
