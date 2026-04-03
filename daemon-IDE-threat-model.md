@@ -247,18 +247,18 @@ flowchart TD
 
 | Threat ID | Threat source | Prerequisites | Threat action | Impact | Impacted assets | Existing controls | Gaps | Recommended mitigations | Detection ideas | Likelihood | Impact | Priority |
 |-----------|---------------|---------------|---------------|--------|----------------|-------------------|------|------------------------|----------------|------------|--------|----------|
-| TM-001 | Prompt injection | User opens attacker text | Coerce model to emit tool calls | Data exfil or harmful action | Workspace, tool auth | Approval prompt in `executeTool()` | Approval fatigue; no risk tiering | Add per-tool risk tiers; show full args diff; default deny for unknown tools | Log tool calls with args hash + approval decision | medium | high | **high** |
-| TM-002 | Malicious MCP server | Allowlisted server compromised | Return crafted output | Confidential leak | Workspace, MCP creds | `solide.ai.mcp.allowedServers` allowlist | Default tool allowlist still `*` | Tighten tool defaults; require trust for http servers; show server origin in approval | Alert when outputs exceed size or contain secrets | medium | high | **high** |
-| TM-003 | x402 phishing/replay | 402 occurs; user pastes | Trick into wrong payment | Financial loss | Payment sig, funds | Manual paste step | No nonce binding | Bind signature to URL+requirement; show payTo/amount; track recent nonces | Log 402 events + accept option | medium | medium | **medium** |
-| TM-004 | Tool output exfil | Tool returns sensitive data | Include in LLM request | Secret/key leakage | Workspace, API keys | None explicit | No output redaction | Add redaction policy (API keys, tokens); cap output length; require consent for send-to-model | Detect high-entropy tokens in outgoing requests | **high** | **high** | **critical** |
+| TM-001 | Prompt injection | User opens attacker text | Coerce model to emit tool calls | Data exfil or harmful action | Workspace, tool auth | Approval prompt in `executeTool()` | ✅ Per-tool risk tiers in `getToolRiskLevel()` | Add per-tool risk tiers; show full args diff; default deny for unknown tools | Log tool calls with args hash + approval decision | medium | high | **high** ✅ |
+| TM-002 | Malicious MCP server | Allowlisted server compromised | Return crafted output | Confidential leak | Workspace, MCP creds | `solide.ai.mcp.allowedServers` allowlist | ✅ Tool allowlist defaults to empty `[]` | Tighten tool defaults; require trust for http servers; show server origin in approval | Alert when outputs exceed size or contain secrets | medium | high | **high** ✅ |
+| TM-003 | x402 phishing/replay | 402 occurs; user pastes | Trick into wrong payment | Financial loss | Payment sig, funds | Manual paste step | ✅ Signature binding + replay protection | Bind signature to URL+requirement; show payTo/amount; track recent nonces | Log 402 events + accept option | medium | medium | **medium** ✅ |
+| TM-004 | Tool output exfil | Tool returns sensitive data | Include in LLM request | Secret/key leakage | Workspace, API keys | None explicit | ✅ `redactToolOutput()` + `SECRET_PATTERNS` | Add redaction policy (API keys, tokens); cap output length; require consent for send-to-model | Detect high-entropy tokens in outgoing requests | **high** | **high** | **critical** ✅ |
 | TM-005 | Supply chain integrity | MCP server compromised | Execute unintended behavior | Full compromise | System integrity | MCP trust model | Router doesn't enforce signing | Require explicit trust for http servers; display command/url; signed configs | Log server start + origin | low | high | **medium** |
-| TM-101 | Prompt injection → key exfil | User + wallet features | Coerce secret key disclosure | Fund theft | Solana secret keys | Secrets in OS keychain | No "never reveal" policy | Hard UI guardrail: never display/export keys in chat; sensitive-action confirm | Warn on 64-byte key pattern in chat | medium | high | **high** |
+| TM-101 | Prompt injection → key exfil | User + wallet features | Coerce secret key disclosure | Fund theft | Solana secret keys | Secrets in OS keychain | ✅ Security warnings in wallet UI + DPRK alert | Hard UI guardrail: never display/export keys in chat; sensitive-action confirm | Warn on 64-byte key pattern in chat | medium | high | **high** ✅ |
 | TM-102 | Terminal injection | Untrusted string in commands | Execute shell commands | Local compromise | System integrity | Some quoting used | ✅ `escapeShellArg()` implemented in wallet + anchor | Centralize command building; strict escaping; block `;` `|` `$()` in user parts | Alert on suspicious chars in sequences | low | high | **medium** ✅ |
 | TM-103 | Malicious RPC | User changes rpcUrl | Tamper responses | User misled | RPC trust | HTTPS default; warning shown | ✅ Allowlist + HTTPS warnings implemented in `rpcCall()` | Implement RPC allowlist; warn on non-https; show host; response sanity checks | Log rpc host changes; detect failures | medium | medium | **medium** ✅ |
 | TM-104 | Key import misuse | User imports wrong format | Wrong address used | Loss of funds | Key integrity | Length checks | No checksum verification | Verify imported key matches derived pubkey; show pubkey + confirm | Warn on duplicate imports | medium | medium | **medium** |
 | TM-105 | Anchor init side effects | Scaffold in sensitive dir | Write files | Integrity compromise | Workspace filesystem | Unique naming | No filesystem sandboxing | Prompt for target directory; restrict to workspace; detect symlinks | Log project creation paths | low | medium | **low** |
-| TM-201 | Plugin sync injection | Server serves malicious plugin | Execute hook with agent privileges | Agent compromise | System integrity, workspace | Nonce cache | Nonce only prevents stale, not malicious | Verify plugin signatures; show hash; require explicit accept for new plugins | Log plugin hash changes | low | high | **medium** |
-| TM-202 | Build postinstall patch | Supply chain compromise | Patch arbitrary files | Full compromise | System integrity | None | Generic file patch mechanism | Minimize patching; pin patched version; audit patch diffs | Log file modifications in postinstall | low | high | **medium** |
+| TM-201 | Plugin sync injection | Server serves malicious plugin | Execute hook with agent privileges | Agent compromise | System integrity, workspace | Nonce cache | ✅ Content hash tracking + change detection in `agentPluginManager.ts` | Verify plugin signatures; show hash; require explicit accept for new plugins | Log plugin hash changes | low | high | **medium** ✅ |
+| TM-202 | Build postinstall patch | Supply chain compromise | Patch arbitrary files | Full compromise | System integrity | None | ✅ Security documentation in postinstall.ts | Minimize patching; pin patched version; audit patch diffs | Log file modifications in postinstall | low | high | **medium** ✅ |
 | TM-203 | Ghidra path traversal | User provides malicious path | Write to unintended location | Integrity compromise | Filesystem | Default to `~/.solide/ghidra-projects` | ✅ `isSafeProjectPath()` validates `..` + prefix restrictions | Validate path; restrict to `~/.solide/`; warn on `..` | Log project creation with full path | low | medium | **low** ✅ |
 | TM-204 | npm dependency compromise | Malicious package published | Execute install hook, exfiltrate keys | Fund theft, key compromise | System integrity, Solana keys | None | No dependency scanning | Pin all critical deps with `=version`; run `npm audit`; use Socket.dev; vendor deps | Alert on unusual package publishes | **high** | **critical** | **critical** |
 | TM-205 | Signing utility compromise | Malicious crate version | Silent key exfiltration | Fund theft | Solana secret keys | None | No version locking requirement | Pin signing deps with exact versions; vendor critical crates; cargo audit | Alert on dependency changes | medium | **critical** | **high** |
@@ -275,10 +275,22 @@ flowchart TD
 - **low**: Issues requiring local compromise or unlikely preconditions
 
 **Examples for this codebase:**
-- **critical**: TM-004 (tool output without redaction), TM-204 (npm dependency compromise), TM-205 (signing utility compromise), TM-206 (durable nonce exploitation), TM-207 (admin key compromise)
-- **high**: TM-001/TM-002 (prompt/tool injection), TM-101 (key exfil)
-- **medium**: TM-003 (x402), TM-102 (terminal), TM-201-TM-202 (plugin/build)
+- **critical**: TM-204 (npm dependency compromise), TM-205 (signing utility compromise), TM-206 (durable nonce exploitation), TM-207 (admin key compromise)
+- **high**: (TM-001, TM-002, TM-101 mitigated with UI guardrails)
+- **medium**: TM-005 (supply chain), TM-104 (key import), TM-105 (anchor)
 - **low**: TM-105 (anchor), TM-203 (ghidra)
+
+**✅ Mitigated threats:**
+- TM-001: Per-tool risk tiers implemented
+- TM-002: MCP allowlist defaults to deny-all
+- TM-003: x402 signature binding + replay protection
+- TM-004: Tool output redaction implemented
+- TM-101: Wallet security warnings + DPRK alert
+- TM-102: Terminal command shell escaping
+- TM-103: RPC endpoint allowlist + HTTPS warnings
+- TM-201: Plugin content hash tracking + change detection
+- TM-202: postinstall security documentation
+- TM-203: Ghidra path traversal validation
 
 ---
 

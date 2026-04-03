@@ -18,6 +18,13 @@ const DEFAULT_MAX_PLUGINS = 20;
 interface ICacheEntry {
 	readonly uri: string;
 	readonly nonce: string;
+	readonly contentHash?: string;
+}
+
+/** In-memory hash tracking for new plugin detection. */
+interface IPluginHashEntry {
+	contentHash: string;
+	firstSeen: number;
 }
 
 /**
@@ -43,6 +50,9 @@ export class AgentPluginManager implements IAgentPluginManager {
 
 	/** Nonces for plugins on disk, keyed by original customization URI string. */
 	private readonly _cachedNonces = new Map<string, string>();
+
+	/** Trusted content hashes for plugins, keyed by URI. */
+	private readonly _trustedHashes = new Map<string, IPluginHashEntry>();
 
 	/** LRU order: most recently used original customization URI strings at the end. */
 	private readonly _lruOrder: string[] = [];
@@ -99,9 +109,37 @@ export class AgentPluginManager implements IAgentPluginManager {
 
 	// ---- plugin storage logic -----------------------------------------------
 
+	private async _computeContentHash(dir: URI): Promise<string> {
+		const files = await this._fileService.resolve(dir, { resolveTo: ['**/*'] });
+		const hashes: string[] = [];
+
+		for (const file of files.children ?? []) {
+			try {
+				const content = await this._fileService.readFile(file);
+				const text = content.value.toString();
+				const hash = await this._sha256(text + file.path);
+				hashes.push(hash);
+			} catch {
+				// Skip files that can't be read
+			}
+		}
+
+		hashes.sort();
+		const combined = hashes.join('|');
+		return this._sha256(combined);
+	}
+
+	private async _sha256(text: string): Promise<string> {
+		const msgBuffer = new TextEncoder().encode(text);
+		const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+		const hashArray = Array.from(new Uint8Array(hashBuffer));
+		return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+	}
+
 	/**
 	 * Syncs a single plugin to local storage. Skips the copy when the
 	 * nonce matches the cached value. Returns the local directory URI.
+	 * Logs a warning if the plugin content hash changes (possible supply chain attack).
 	 */
 	private async _syncPlugin(clientId: string, ref: ICustomizationRef): Promise<URI> {
 		const pluginUri = toAgentClientUri(URI.parse(ref.uri), clientId);
@@ -115,9 +153,28 @@ export class AgentPluginManager implements IAgentPluginManager {
 			return destDir;
 		}
 
+		const trustedHash = this._trustedHashes.get(ref.uri);
+
 		this._logService.info(`[AgentPluginManager] Syncing plugin: ${ref.uri} → ${destDir.toString()}`);
 
 		await this._fileService.copy(pluginUri, destDir, true);
+
+		const contentHash = await this._computeContentHash(destDir);
+
+		if (trustedHash) {
+			if (trustedHash.contentHash !== contentHash) {
+				this._logService.warn(
+					`[AgentPluginManager] SECURITY: Plugin hash changed for ${ref.uri}` +
+					`\n  Previous: ${trustedHash.contentHash.substring(0, 16)}...` +
+					`\n  Current:  ${contentHash.substring(0, 16)}...` +
+					`\n  First seen: ${new Date(trustedHash.firstSeen).toISOString()}`
+				);
+			}
+		} else {
+			this._logService.info(`[AgentPluginManager] New plugin ${ref.uri} - storing trusted hash: ${contentHash.substring(0, 16)}...`);
+		}
+
+		this._trustedHashes.set(ref.uri, { contentHash, firstSeen: trustedHash?.firstSeen ?? Date.now() });
 
 		if (ref.nonce) {
 			this._cachedNonces.set(ref.uri, ref.nonce);
@@ -148,6 +205,7 @@ export class AgentPluginManager implements IAgentPluginManager {
 				break;
 			}
 			this._cachedNonces.delete(evictUri);
+			this._trustedHashes.delete(evictUri);
 			const evictKey = this._keyForUri(evictUri);
 			const evictDir = URI.joinPath(this._basePath, evictKey);
 			this._logService.info(`[AgentPluginManager] Evicting plugin: ${evictUri}`);
@@ -181,6 +239,9 @@ export class AgentPluginManager implements IAgentPluginManager {
 			for (const entry of entries) {
 				if (typeof entry.uri === 'string' && typeof entry.nonce === 'string') {
 					this._cachedNonces.set(entry.uri, entry.nonce);
+					if (entry.contentHash) {
+						this._trustedHashes.set(entry.uri, { contentHash: entry.contentHash, firstSeen: Date.now() });
+					}
 					this._lruOrder.push(entry.uri);
 				}
 			}
@@ -196,8 +257,9 @@ export class AgentPluginManager implements IAgentPluginManager {
 			const entries: ICacheEntry[] = [];
 			for (const uri of this._lruOrder) {
 				const nonce = this._cachedNonces.get(uri);
+				const hashEntry = this._trustedHashes.get(uri);
 				if (nonce) {
-					entries.push({ uri, nonce });
+					entries.push({ uri, nonce, contentHash: hashEntry?.contentHash });
 				}
 			}
 			await this._fileService.createFolder(this._basePath);

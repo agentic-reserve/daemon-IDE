@@ -20,6 +20,19 @@ import { IMcpToolRouter, McpToolRouter } from './mcpToolRouter.js';
 
 type OpenAiRole = 'system' | 'user' | 'assistant' | 'tool';
 
+function simpleHash(value: string): string {
+	let hash = 0;
+	for (let i = 0; i < value.length; i++) {
+		const char = value.charCodeAt(i);
+		hash = ((hash << 5) - hash) + char;
+		hash = hash & hash;
+	}
+	return Math.abs(hash).toString(16);
+}
+
+const REPLAY_WINDOW_MS = 60_000;
+const _recentSignatures = new Map<string, number>();
+
 const SECRET_PATTERNS = [
 	/ak-[a-zA-Z0-9]{20,}/i,
 	/sk-[a-zA-Z0-9]{20,}/i,
@@ -322,14 +335,39 @@ export class AiProviderService extends Disposable implements IAiProviderService 
 						}
 					}
 
+					const requestBinding = `${url}::${paymentRequiredPreview}::${simpleHash(paymentRequiredHeader || '')}`;
+					const bindingHash = simpleHash(requestBinding);
+					const now = Date.now();
+					for (const [sig, timestamp] of _recentSignatures) {
+						if (now - timestamp > REPLAY_WINDOW_MS) {
+							_recentSignatures.delete(sig);
+						}
+					}
+
+					const prompt = [
+						'SECURITY: Verify before paying!',
+						`URL: ${url}`,
+						paymentRequiredPreview ? `Requirement: ${paymentRequiredPreview}` : '',
+						`Binding: ${bindingHash.substring(0, 8)}...`,
+						'',
+						'Paste payment signature (base64 JSON) to pay and retry once.',
+						'WARNING: The same signature cannot be reused within 60 seconds.',
+					].filter(Boolean).join('\n');
+
 					const paymentSignatureB64 = await this._quickInputService.input({
 						password: true,
-						prompt: 'PAYMENT-SIGNATURE (base64 JSON). Paste to pay and retry once.',
+						prompt,
 						placeHolder: paymentRequiredPreview ? `PAYMENT-REQUIRED: ${paymentRequiredPreview}` : undefined,
 					});
 
 					if (paymentSignatureB64) {
-						response = await post({ 'PAYMENT-SIGNATURE': paymentSignatureB64.trim() });
+						const trimmedSig = paymentSignatureB64.trim();
+						if (_recentSignatures.has(trimmedSig)) {
+							this._logService.warn('[AiProviderService] x402 replay detected - signature used within 60s window');
+							throw new Error('Payment signature was recently used. Wait 60 seconds before retrying.');
+						}
+						_recentSignatures.set(trimmedSig, Date.now());
+						response = await post({ 'PAYMENT-SIGNATURE': trimmedSig });
 						if (!response.ok) {
 							const text = await response.text();
 							throw new Error(`AI provider request failed (${response.status}): ${text}`);
